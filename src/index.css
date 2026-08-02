@@ -353,6 +353,15 @@ button {
   color: #e6e6e6;
 }
 
+/* Icons are exported as bare glyphs; this restores the Figma icon box so the
+   4px gap is measured from the box edge and nothing gets stretched. */
+.pill-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .icon-btn {
   width: 40px;
   height: 40px;
@@ -461,7 +470,7 @@ button {
   background: linear-gradient(180deg, #0b1d68 24.84%, #071136 50%);
   padding: 12px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18px;
   color: #ccc;
 }
@@ -506,13 +515,15 @@ button {
   height: 15px;
 }
 
+/* Art fits its box so the gap to the title reads 8px on both sides —
+   overhanging it made the left gap collapse to 4. */
 .divider-line img {
   position: absolute;
   top: -26.67%;
   bottom: -26.67%;
   left: 0;
-  right: -5.97%;
-  width: auto;
+  right: 0;
+  width: 100%;
   height: 23px;
 }
 

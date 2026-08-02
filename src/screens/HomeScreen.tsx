@@ -50,23 +50,39 @@ export default function HomeScreen({
           <div className="home-head-row">
             <div className="home-head-left">
               <div className="pill">
-                <img src="/assets/icon-fire.svg" alt="" width={13} height={16} />
+                <span className="pill-icon" style={{ width: 16, height: 16 }}>
+                  <img
+                    src="/assets/icon-fire.svg"
+                    alt=""
+                    width={11.81}
+                    height={15.99}
+                  />
+                </span>
                 {streak}
               </div>
               <div className="pill">
-                <img src="/assets/icon-flash.svg" alt="" width={10} height={16} />
+                <span className="pill-icon" style={{ width: 18, height: 18 }}>
+                  <img
+                    src="/assets/icon-flash.svg"
+                    alt=""
+                    width={10.13}
+                    height={16.13}
+                  />
+                </span>
                 {xp}
               </div>
             </div>
 
             <button className="rank-pill" onClick={onOpenLeaderboard}>
               <span className="rank-pill-body">
-                <img
-                  src="/assets/icon-trophy.svg"
-                  alt=""
-                  width={16}
-                  height={14}
-                />
+                <span className="pill-icon" style={{ width: 16, height: 16 }}>
+                  <img
+                    src="/assets/icon-trophy.svg"
+                    alt=""
+                    width={14.5}
+                    height={13.71}
+                  />
+                </span>
                 {rank}
               </span>
               <span className="rank-pill-chevron">
