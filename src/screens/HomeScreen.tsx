@@ -73,8 +73,8 @@ export default function HomeScreen({
                 <img
                   src="/assets/icon-arrow.svg"
                   alt=""
-                  width={8}
-                  height={4.5}
+                  width={8.75}
+                  height={4.4}
                   style={{ transform: 'rotate(90deg)' }}
                 />
               </span>
@@ -82,7 +82,7 @@ export default function HomeScreen({
           </div>
 
           <div className="nudge">
-            <img src="/assets/icon-info.svg" alt="" width={20} height={20} />
+            <img src="/assets/icon-info.svg" alt="" width={18} height={18} />
             <span>{nudgeFor(completed, doneToday)}</span>
             <img className="nudge-glare" src="/assets/nudge-glare.svg" alt="" />
           </div>

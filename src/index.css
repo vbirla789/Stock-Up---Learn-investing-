@@ -387,10 +387,9 @@ button {
   background: var(--alpha16);
   border: 1px solid var(--alpha16);
   font-size: 16px;
-  font-weight: 600;
-  line-height: 22px;
-  letter-spacing: -0.15px;
-  color: #fff;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #e6e6e6;
 }
 
 .icon-btn {
@@ -477,9 +476,9 @@ button {
   justify-content: center;
   gap: 4px;
   font-size: 16px;
-  font-weight: 600;
-  line-height: 22px;
-  letter-spacing: -0.15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #e6e6e6;
 }
 
 .rank-pill-chevron {
@@ -508,7 +507,7 @@ button {
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.14px;
-  color: #fff;
+  color: #ccc;
 }
 
 .nudge > img:first-child {
@@ -561,17 +560,14 @@ button {
   line-height: 32px;
   text-align: center;
   white-space: nowrap;
-  background-image: linear-gradient(179.58deg, #dff6ff 56.68%, #81cfed 113.12%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #d9d9d9;
   text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 .level-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 20px;
+  column-gap: 16px;
   row-gap: 22px;
 }
 
@@ -588,15 +584,15 @@ button {
 
 .level-name {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.3;
   text-align: center;
-  color: #fff;
+  color: #e6e6e6;
 }
 
 .level-cell.is-locked .level-name {
-  font-weight: 500;
-  color: var(--muted);
+  font-weight: 600;
+  color: #666;
 }
 
 /* ---------- hex badge ---------- */
