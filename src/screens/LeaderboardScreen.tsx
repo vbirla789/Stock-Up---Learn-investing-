@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { StatusBar, HomeBar, BackButton } from '../components/Chrome'
 import { boardFor } from '../data/leaderboard'
+import type { Tier } from '../types'
 
-const badge = {
+interface LeaderboardScreenProps {
+  onBack: () => void
+  xp: number
+}
+
+const badge: Record<Tier, string> = {
   gold: '/assets/badge-gold.svg',
   blue: '/assets/badge-blue.svg',
   grey: '/assets/badge-grey.svg',
@@ -57,7 +63,10 @@ const fallbackAvatars = [
   '/assets/avatar-3.png',
 ]
 
-export default function LeaderboardScreen({ onBack, xp }) {
+export default function LeaderboardScreen({
+  onBack,
+  xp,
+}: LeaderboardScreenProps) {
   const { podium, rows } = boardFor(xp)
   const [stuck, setStuck] = useState(false)
 

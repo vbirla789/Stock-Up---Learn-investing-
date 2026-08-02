@@ -2,9 +2,11 @@
 // (one text signboard, one video card) followed by 3 questions.
 // XP is fixed at 100 a level, matching the success screen in the design.
 
+import type { Level } from '../types'
+
 export const XP_PER_LEVEL = 100
 
-const levels = [
+const levels: Level[] = [
   {
     id: 1,
     chapter: 'Basics',

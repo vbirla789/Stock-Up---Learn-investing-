@@ -1,7 +1,19 @@
 // The gold hexagon level badge. One exported asset, three states:
 // done (green tick), current (gold + gently bobbing), locked (dimmed + padlock).
 
-export default function HexBadge({ number, state = 'locked', large = false }) {
+import type { LevelState } from '../types'
+
+interface HexBadgeProps {
+  number: number
+  state?: LevelState
+  large?: boolean
+}
+
+export default function HexBadge({
+  number,
+  state = 'locked',
+  large = false,
+}: HexBadgeProps) {
   const locked = state === 'locked'
   return (
     <span className={large ? 'hex lg' : 'hex'}>

@@ -1,6 +1,12 @@
 // Shared screen chrome: iOS status bar, home indicator, the layered background
 // and the chunky primary button. All lifted straight from the Figma frames.
 
+import type { ReactNode } from 'react'
+
+interface IconButtonProps {
+  onClick: () => void
+}
+
 export function StatusBar() {
   return (
     <div className="statusbar">
@@ -71,7 +77,17 @@ export function ScreenBg() {
   )
 }
 
-export function PrimaryButton({ children, onClick, disabled }) {
+interface PrimaryButtonProps {
+  children: ReactNode
+  onClick: () => void
+  disabled?: boolean
+}
+
+export function PrimaryButton({
+  children,
+  onClick,
+  disabled,
+}: PrimaryButtonProps) {
   return (
     <button className="btn-primary" onClick={onClick} disabled={disabled}>
       <img src="/assets/btn-primary.svg" alt="" />
@@ -80,7 +96,7 @@ export function PrimaryButton({ children, onClick, disabled }) {
   )
 }
 
-export function BackButton({ onClick }) {
+export function BackButton({ onClick }: IconButtonProps) {
   return (
     <button className="icon-btn" onClick={onClick} aria-label="Back">
       <i>
@@ -96,7 +112,7 @@ export function BackButton({ onClick }) {
   )
 }
 
-export function CloseButton({ onClick }) {
+export function CloseButton({ onClick }: IconButtonProps) {
   return (
     <button className="icon-btn" onClick={onClick} aria-label="Close">
       <i>

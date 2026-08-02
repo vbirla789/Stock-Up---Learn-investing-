@@ -7,12 +7,19 @@ import {
 import HexBadge from '../components/HexBadge'
 import levels, { XP_PER_LEVEL } from '../data/levels'
 
+interface SuccessScreenProps {
+  levelId: number
+  onClose: () => void
+  onLeaderboard: () => void
+  onShare: () => void
+}
+
 export default function SuccessScreen({
   levelId,
   onClose,
   onLeaderboard,
   onShare,
-}) {
+}: SuccessScreenProps) {
   const last = levelId >= levels.length
 
   return (

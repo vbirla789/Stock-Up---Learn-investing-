@@ -3,7 +3,9 @@
 // Your own rank is derived from your XP against this list, which is why it
 // climbs as you work through the path.
 
-const rivals = [
+import type { Board, Entry, Rival, Row, Tier } from '../types'
+
+const rivals: Rival[] = [
   { name: 'Ishita', points: 1500, avatar: '/assets/avatar-1.png' },
   { name: 'Aarav', points: 1430, avatar: '/assets/avatar-2.png' },
   { name: 'Kabir', points: 1380, avatar: '/assets/avatar-3.png' },
@@ -38,26 +40,30 @@ const rivals = [
   { name: 'Aria', points: 30 },
 ]
 
-export function rankFor(xp) {
+export function rankFor(xp: number): number {
   return rivals.filter((r) => r.points > xp).length + 1
 }
 
-// Merged board with you slotted in by XP.
-export function boardFor(xp) {
-  const all = [...rivals, { name: 'You', points: xp, isYou: true }]
+function tierFor(entry: Entry): Tier {
+  if (entry.isYou) return 'grey'
+  return entry.rank <= 3 ? 'gold' : 'blue'
+}
+
+/** Merged board with you slotted in by XP. */
+export function boardFor(xp: number): Board {
+  const all: Entry[] = [...rivals, { name: 'You', points: xp, isYou: true }]
     .sort((a, b) => b.points - a.points)
     .map((entry, i) => ({ ...entry, rank: i + 1 }))
 
   const top = all.slice(0, 10)
-  const you = all.find((e) => e.isYou)
-  const rows = top.some((e) => e.isYou) ? top : [...top, you]
+  // the synthetic 'You' entry is always present, so this can't miss
+  const you = all.find((e) => e.isYou)!
+  const listed = top.some((e) => e.isYou) ? top : [...top, you]
+  const rows: Row[] = listed.map((e) => ({ ...e, tier: tierFor(e) }))
 
   return {
     podium: [all[1], all[0], all[2]], // rendered left, centre, right
-    rows: rows.map((e) => ({
-      ...e,
-      tier: e.isYou ? 'grey' : e.rank <= 3 ? 'gold' : 'blue',
-    })),
+    rows,
     you,
   }
 }

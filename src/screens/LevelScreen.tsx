@@ -7,21 +7,33 @@ import {
   BackButton,
 } from '../components/Chrome'
 import levels from '../data/levels'
+import type { Level } from '../types'
+
+interface LevelScreenProps {
+  levelId: number
+  onExit: () => void
+  onComplete: (id: number) => void
+}
 
 // A level is five steps: a signboard, a video card, then three questions.
 // Wrong answers explain themselves and let you retry — there are no lives,
 // because being wrong is the point of the exercise.
 
-export default function LevelScreen({ levelId, onExit, onComplete }) {
-  const level = levels.find((l) => l.id === levelId)
+export default function LevelScreen({
+  levelId,
+  onExit,
+  onComplete,
+}: LevelScreenProps) {
+  // levelId always comes from the home grid, so this lookup can't miss
+  const level = levels.find((l) => l.id === levelId) as Level
   const [index, setIndex] = useState(0)
-  const [picked, setPicked] = useState(null)
+  const [picked, setPicked] = useState<number | null>(null)
   const [checked, setChecked] = useState(false)
 
   const step = level.steps[index]
   const total = level.steps.length
-  const isQuiz = step.type === 'quiz'
-  const correct = isQuiz && picked === step.answer
+  const quiz = step.type === 'quiz' ? step : null
+  const correct = quiz !== null && picked === quiz.answer
 
   function back() {
     if (index === 0) return onExit()
@@ -31,11 +43,11 @@ export default function LevelScreen({ levelId, onExit, onComplete }) {
   }
 
   function advance() {
-    if (isQuiz && !checked) {
+    if (quiz !== null && !checked) {
       setChecked(true)
       return
     }
-    if (isQuiz && checked && !correct) {
+    if (quiz !== null && checked && !correct) {
       // try again on the same question
       setPicked(null)
       setChecked(false)
@@ -50,7 +62,7 @@ export default function LevelScreen({ levelId, onExit, onComplete }) {
     }
   }
 
-  const label = !isQuiz
+  const label = quiz === null
     ? 'Next'
     : !checked
       ? 'Check'
@@ -60,7 +72,7 @@ export default function LevelScreen({ levelId, onExit, onComplete }) {
           : 'Next'
         : 'Try again'
 
-  const disabled = isQuiz && picked === null
+  const disabled = quiz !== null && picked === null
 
   return (
     <>
@@ -127,18 +139,18 @@ export default function LevelScreen({ levelId, onExit, onComplete }) {
             </div>
           )}
 
-          {isQuiz && (
+          {quiz !== null && (
             <div className="quiz">
               <h1>
-                {step.lead}
-                <em>{step.accent}</em>
+                {quiz.lead}
+                <em>{quiz.accent}</em>
               </h1>
               <div className="quiz-options">
-                {step.options.map((option, i) => {
+                {quiz.options.map((option, i) => {
                   let cls = 'quiz-option'
                   if (!checked && picked === i) cls += ' is-picked'
-                  if (checked && i === step.answer) cls += ' is-correct'
-                  if (checked && picked === i && i !== step.answer)
+                  if (checked && i === quiz.answer) cls += ' is-correct'
+                  if (checked && picked === i && i !== quiz.answer)
                     cls += ' is-wrong'
                   return (
                     <button
@@ -155,7 +167,7 @@ export default function LevelScreen({ levelId, onExit, onComplete }) {
               {checked && (
                 <div className={`quiz-why ${correct ? 'ok' : 'no'}`}>
                   {correct ? '' : 'Not quite. '}
-                  {step.why}
+                  {quiz.why}
                 </div>
               )}
             </div>

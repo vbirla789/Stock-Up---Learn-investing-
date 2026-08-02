@@ -5,30 +5,32 @@ import SuccessScreen from './screens/SuccessScreen'
 import LeaderboardScreen from './screens/LeaderboardScreen'
 import { XP_PER_LEVEL } from './data/levels'
 import { rankFor } from './data/leaderboard'
+import type { Progress, View } from './types'
 
 const KEY = 'nocap-progress-v1'
 
 // Starting state matches the Figma home screen exactly: a 5-day streak,
 // 100 XP already banked and rank 28 — with level 1 as the only one open.
-const initial = {
+const initial: Progress = {
   completed: 0,
   xp: 100,
   streak: 5,
   doneToday: false,
 }
 
-function load() {
+function load(): Progress {
   try {
     const raw = localStorage.getItem(KEY)
-    return raw ? { ...initial, ...JSON.parse(raw) } : initial
+    if (!raw) return initial
+    return { ...initial, ...(JSON.parse(raw) as Partial<Progress>) }
   } catch {
     return initial
   }
 }
 
 export default function App() {
-  const [state, setState] = useState(load)
-  const [view, setView] = useState({ name: 'home' })
+  const [state, setState] = useState<Progress>(load)
+  const [view, setView] = useState<View>({ name: 'home' })
 
   useEffect(() => {
     try {
@@ -38,7 +40,7 @@ export default function App() {
     }
   }, [state])
 
-  function completeLevel(id) {
+  function completeLevel(id: number) {
     setState((s) => {
       const first = id > s.completed
       return {
@@ -56,8 +58,8 @@ export default function App() {
     setView({ name: 'home' })
   }
 
-  function share() {
-    const text = `I just cleared level ${view.levelId} on nocap — learning the market before I risk a rupee.`
+  function share(levelId: number) {
+    const text = `I just cleared level ${levelId} on nocap — learning the market before I risk a rupee.`
     if (navigator.share) navigator.share({ text }).catch(() => {})
     else if (navigator.clipboard) navigator.clipboard.writeText(text)
   }
@@ -65,7 +67,10 @@ export default function App() {
   return (
     <div className="stage">
       <div className="device">
-        <div className="screen" key={view.name + (view.levelId || '')}>
+        <div
+          className="screen"
+          key={view.name + ('levelId' in view ? view.levelId : '')}
+        >
           {view.name === 'home' && (
             <HomeScreen
               state={{ ...state, rank: rankFor(state.xp) }}
@@ -87,7 +92,7 @@ export default function App() {
               levelId={view.levelId}
               onClose={() => setView({ name: 'home' })}
               onLeaderboard={() => setView({ name: 'leaderboard' })}
-              onShare={share}
+              onShare={() => share(view.levelId)}
             />
           )}
 

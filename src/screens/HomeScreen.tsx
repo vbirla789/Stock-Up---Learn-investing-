@@ -1,11 +1,23 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { StatusBar, HomeBar, ScreenBg } from '../components/Chrome'
 import HexBadge from '../components/HexBadge'
 import levels from '../data/levels'
+import type { HomeState, LevelState } from '../types'
+
+interface HomeScreenProps {
+  state: HomeState
+  onOpenLevel: (id: number) => void
+  onOpenLeaderboard: () => void
+}
+
+interface Nudge {
+  accent: string
+  rest: string
+}
 
 // One nudge at a time, highest priority wins:
 // 1. streak at risk  2. progress to the SIP  3. you're ready
-function nudgeFor(completed, doneToday) {
+function nudgeFor(completed: number, doneToday: boolean): Nudge {
   if (!doneToday)
     return { accent: 'One level today', rest: ' keeps your 5-day streak.' }
   const left = levels.length - completed
@@ -16,15 +28,21 @@ function nudgeFor(completed, doneToday) {
   return { accent: `${left} levels`, rest: ' to unlock your SIP.' }
 }
 
-export default function HomeScreen({ state, onOpenLevel, onOpenLeaderboard }) {
-  const [toast, setToast] = useState(null)
+export default function HomeScreen({
+  state,
+  onOpenLevel,
+  onOpenLeaderboard,
+}: HomeScreenProps) {
+  const [toast, setToast] = useState<string | null>(null)
+  const toastTimer = useRef<number | undefined>(undefined)
   const { completed, xp, streak, rank, doneToday } = state
   const nudge = nudgeFor(completed, doneToday)
 
-  function tapLocked(level) {
+  // A locked tile is never a dead tap — it says what to finish first.
+  function tapLocked() {
     setToast(`Finish level ${completed + 1} first.`)
-    window.clearTimeout(tapLocked.t)
-    tapLocked.t = window.setTimeout(() => setToast(null), 1800)
+    window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToast(null), 1800)
   }
 
   return (
@@ -85,13 +103,17 @@ export default function HomeScreen({ state, onOpenLevel, onOpenLeaderboard }) {
             {levels.map((level) => {
               const done = level.id <= completed
               const current = level.id === completed + 1
-              const st = done ? 'done' : current ? 'current' : 'locked'
+              const st: LevelState = done
+                ? 'done'
+                : current
+                  ? 'current'
+                  : 'locked'
               return (
                 <button
                   key={level.id}
                   className={`level-cell is-${st}`}
                   onClick={() =>
-                    done || current ? onOpenLevel(level.id) : tapLocked(level)
+                    done || current ? onOpenLevel(level.id) : tapLocked()
                   }
                 >
                   <HexBadge number={level.id} state={st} />
