@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StatusBar, HomeBar, BackButton } from '../components/Chrome'
+import { StatusBar, HomeBar, BackButton, ScreenBg } from '../components/Chrome'
 import { boardFor } from '../data/leaderboard'
 import type { Tier } from '../types'
 
@@ -14,47 +14,48 @@ const badge: Record<Tier, string> = {
   grey: '/assets/badge-grey.svg',
 }
 
-// Podium geometry lifted from the Figma frame so the blocks sit under the art.
+// Podium geometry, relative to the 335 x 268 podium frame in Figma.
 const blocks = [
   {
     place: 2,
-    left: 19,
-    top: 289,
+    left: 4,
+    top: 104,
     h: 100,
-    capTop: 272,
+    capTop: 87,
     capH: 17,
     cap: '/assets/podium-top-2.svg',
-    fill: 'rgba(158,214,46,0.8)',
+    fill: 'rgba(34, 197, 94, 0.8)',
     numTop: 16,
   },
   {
     place: 1,
-    left: 131,
-    top: 255,
+    left: 116,
+    top: 70,
     h: 134,
-    capTop: 235,
+    capTop: 50,
     capH: 20,
     cap: '/assets/podium-top-1.svg',
-    fill: '#9ed62e',
+    fill: '#22c55e',
     numTop: 23,
   },
   {
     place: 3,
-    left: 243,
-    top: 305,
+    left: 228,
+    top: 120,
     h: 84,
-    capTop: 291,
+    capTop: 106,
     capH: 14,
     cap: '/assets/podium-top-3.svg',
-    fill: 'rgba(158,214,46,0.93)',
+    fill: 'rgba(34, 197, 94, 0.93)',
     numTop: 14,
   },
 ]
 
+// podium[] arrives as [rank 2, rank 1, rank 3] — left, centre, right
 const seats = [
-  { place: 2, left: 'calc(50% - 108.1px)', top: 163 },
-  { place: 1, left: 'calc(50% + 0.9px)', top: 125 },
-  { place: 3, left: 'calc(50% + 107.9px)', top: 182 },
+  { place: 2, left: 24, top: 42 },
+  { place: 1, left: 137, top: 6 },
+  { place: 3, left: 248, top: 62 },
 ]
 
 const fallbackAvatars = [
@@ -72,6 +73,8 @@ export default function LeaderboardScreen({
 
   return (
     <>
+      <ScreenBg />
+
       {/* Sits above the scroll layer so the list can never cover the back button */}
       <div className={`lb-header ${stuck ? 'is-stuck' : ''}`}>
         <StatusBar />
@@ -83,60 +86,55 @@ export default function LeaderboardScreen({
 
       <div
         className="lb"
-        onScroll={(e) => setStuck(e.currentTarget.scrollTop > 330)}
+        onScroll={(e) => setStuck(e.currentTarget.scrollTop > 8)}
       >
-        <div className="lb-top">
-          <img className="podium-bg" src="/assets/podium-bg.svg" alt="" />
+        <div className="lb-content">
+          <div className="lb-podium">
+            <img className="podium-bg" src="/assets/podium-bg.svg" alt="" />
 
-          {blocks.map((b) => (
-            <div key={b.place}>
-              <img
-                className="podium-cap"
-                src={b.cap}
-                alt=""
-                style={{ left: b.left, top: b.capTop, height: b.capH }}
-              />
-              <div
-                className="podium-block"
-                style={{
-                  left: b.left,
-                  top: b.top,
-                  width: 112,
-                  height: b.h,
-                  background: b.fill,
-                }}
-              >
-                <p style={{ marginTop: b.numTop }}>{b.place}</p>
-              </div>
-            </div>
-          ))}
-
-          {seats.map((seat, i) => {
-            const person = podium[i]
-            return (
-              <div
-                key={seat.place}
-                className="podium-person"
-                style={{
-                  left: seat.left,
-                  top: seat.top,
-                  transform: 'translateX(-50%)',
-                }}
-              >
+            {blocks.map((b) => (
+              <div key={b.place}>
                 <img
-                  className="avatar"
-                  src={person.avatar || fallbackAvatars[i]}
+                  className="podium-cap"
+                  src={b.cap}
                   alt=""
+                  style={{ left: b.left, top: b.capTop, height: b.capH }}
                 />
-                <span>{person.name}</span>
-                <span className="podium-points">{person.points}</span>
+                <div
+                  className="podium-block"
+                  style={{
+                    left: b.left,
+                    top: b.top,
+                    width: 112,
+                    height: b.h,
+                    background: b.fill,
+                  }}
+                >
+                  <p style={{ marginTop: b.numTop }}>{b.place}</p>
+                </div>
               </div>
-            )
-          })}
+            ))}
 
-        </div>
+            {seats.map((seat, i) => {
+              const person = podium[i]
+              return (
+                <div
+                  key={seat.place}
+                  className="podium-person"
+                  style={{ left: seat.left, top: seat.top }}
+                >
+                  <img
+                    className="avatar"
+                    src={person.avatar || fallbackAvatars[i]}
+                    alt=""
+                  />
+                  <span>{person.name}</span>
+                  <span className="podium-points">{person.points}</span>
+                </div>
+              )
+            })}
+          </div>
 
-        <div className="lb-list-wrap">
           <div className="lb-list">
             <div className="lb-list-head">
               <span>Rank</span>

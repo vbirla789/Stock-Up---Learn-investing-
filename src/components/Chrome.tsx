@@ -64,15 +64,13 @@ export function HomeBar() {
   )
 }
 
+// Same backdrop as home — a tall glow behind the faint grid — but with the
+// glow centred at the top of the screen rather than the middle.
 export function ScreenBg() {
   return (
-    <div className="bg">
+    <div className="bg bg-screen">
       <div className="bg-glow" />
-      <img className="bg-texture" src="/assets/bg-texture.png" alt="" />
-      <div className="bg-swoosh">
-        <img src="/assets/bg-swoosh.svg" alt="" />
-      </div>
-      <div className="bg-fade" />
+      <div className="bg-grid" />
     </div>
   )
 }

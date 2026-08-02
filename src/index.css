@@ -2,14 +2,14 @@
   --ink: #030612;
   --card: #101423;
   --edge: #4d5781;
-  --green: #9ed62e;
+  --green: #22c55e;
   --muted: #d6d6d6;
   --dim: #a3a5ae;
   --alpha16: rgba(255, 255, 255, 0.16);
-  --correct-bg: #32440e;
-  --correct-edge: #9ed62e;
-  --wrong-bg: #520000;
-  --wrong-edge: #b20101;
+  --correct-bg: #082b15;
+  --correct-edge: #22c55e;
+  --wrong-bg: #3d0000;
+  --wrong-edge: #cc0000;
   --gold: linear-gradient(
     179.44deg,
     #f7ef91 20%,
@@ -158,7 +158,8 @@ button {
   .screen .footer {
     padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
-  .screen .lb-list-wrap {
+  .screen .lb-content {
+    padding-top: calc(88px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
   }
 }
@@ -237,6 +238,20 @@ button {
     234.53px 478.88px at 187.5px 292px,
     #061037 0%,
     #00061e 100%
+  );
+}
+
+/* Lesson, quiz and success share the grid, with the glow pinned to the top. */
+.bg-screen .bg-glow {
+  left: 0;
+  top: -7px;
+  width: 375px;
+  height: 1018px;
+  background: radial-gradient(
+    321.04px 655.5px at 187.5px 8px,
+    #061037 0%,
+    #040a25 50%,
+    #020512 100%
   );
 }
 
@@ -730,6 +745,7 @@ button {
   font-size: 18px;
   font-weight: 600;
   line-height: 22px;
+  color: #ccc;
 }
 
 .progress-track {
@@ -819,6 +835,7 @@ button {
   font-size: 26px;
   font-weight: 700;
   line-height: 1.4;
+  color: #e6e6e6;
 }
 
 .signboard h1 em {
@@ -828,8 +845,8 @@ button {
 
 .signboard p {
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 21px;
+  font-weight: 600;
   line-height: 1.4;
   color: var(--muted);
 }
@@ -1037,8 +1054,8 @@ button {
 }
 
 .quiz-why.ok {
-  background: rgba(158, 214, 46, 0.14);
-  border: 1px solid rgba(158, 214, 46, 0.5);
+  background: rgba(34, 197, 94, 0.14);
+  border: 1px solid rgba(34, 197, 94, 0.5);
   color: #e8f6cd;
 }
 
@@ -1178,27 +1195,27 @@ button {
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
-  background: #000;
 }
 
 .lb::-webkit-scrollbar {
   display: none;
 }
 
-/* The podium stays pinned; the ranked list scrolls up over it. */
-.lb-top {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  height: 414px;
-  flex-shrink: 0;
-  overflow: hidden;
+/* 20px column, back button row, then podium and list — matching the frame */
+/* clears the absolutely-positioned header: 44 status + 24 + 40 back row + 24 */
+.lb-content {
+  padding: 132px 20px 32px;
 }
 
-.lb-top > img.podium-bg {
+.lb-podium {
+  position: relative;
+  height: 268px;
+}
+
+.lb-podium > img.podium-bg {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: -15px;
+  top: -121px;
   width: 375px;
   height: 423px;
 }
@@ -1211,15 +1228,14 @@ button {
   z-index: 20;
   display: flex;
   flex-direction: column;
-  /* same 16px below the status bar as the level and success screens */
-  gap: 16px;
+  gap: 24px;
   padding-bottom: 12px;
   transition: background 0.2s ease;
 }
 
 /* once the list slides under it, the header needs its own surface */
 .lb-header.is-stuck {
-  background: #000;
+  background: #020512;
 }
 
 .lb-title-row {
@@ -1238,10 +1254,8 @@ button {
   font-size: 20px;
   font-weight: 700;
   line-height: 36px;
-  background-image: linear-gradient(179.27deg, #dff6ff 56.68%, #81cfed 113.12%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #e6e6e6;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
   pointer-events: none;
 }
 
@@ -1262,9 +1276,12 @@ button {
   object-fit: cover;
 }
 
+/* 16px line box keeps the stack at Figma's 92.4px so the points pill
+   clears the block numeral below it */
 .podium-person span {
   font-size: 16px;
   font-weight: 700;
+  line-height: 16px;
   letter-spacing: 0.32px;
   text-align: center;
 }
@@ -1279,11 +1296,13 @@ button {
   align-items: center;
   justify-content: center;
   font-size: 14px;
+  font-weight: 400;
 }
 
 .podium-block {
   position: absolute;
   overflow: hidden;
+  z-index: 2;
 }
 
 .podium-block p {
@@ -1298,18 +1317,11 @@ button {
 .podium-cap {
   position: absolute;
   width: 112px;
-}
-
-.lb-list-wrap {
-  position: relative;
-  margin-top: -37px;
-  z-index: 4;
-  background: #000;
-  border-radius: 28px 28px 0 0;
-  padding: 24px 20px 32px;
+  z-index: 2;
 }
 
 .lb-list {
+  margin-top: 24px;
   border-radius: 16px;
   border: 1px solid rgba(62, 77, 142, 0.7);
   background: rgba(0, 87, 255, 0.05);
@@ -1338,7 +1350,7 @@ button {
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 0 12px;
+  padding: 0 18px 0 12px;
   border-radius: 10px;
   background: linear-gradient(
     90deg,
@@ -1350,13 +1362,13 @@ button {
 .lb-row.gold {
   background: linear-gradient(
     90deg,
-    rgba(158, 214, 46, 0.27) 22.27%,
+    rgba(34, 197, 94, 0.27) 22.27%,
     rgba(5, 41, 21, 0.27) 98.57%
   );
 }
 
 .lb-row.me {
-  outline: 1px solid rgba(158, 214, 46, 0.45);
+  outline: 1px solid rgba(34, 197, 94, 0.45);
 }
 
 /* direct child only — the YOU diamond nested deeper keeps its own size */
@@ -1383,13 +1395,14 @@ button {
   gap: 4px;
 }
 
+/* Figma still has the old lime here, so this one stays off the token */
 .lb-you {
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 12px;
   line-height: 18px;
-  color: var(--green);
+  color: #9ed62e;
 }
 
 .toast {
