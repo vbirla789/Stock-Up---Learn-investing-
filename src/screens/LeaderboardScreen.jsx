@@ -114,7 +114,7 @@ export default function LeaderboardScreen({ onBack, xp }) {
           })}
 
           <div className="lb-header">
-            <div style={{ height: 44 }} />
+            <div className="lb-status-space" />
             <div className="lb-title-row">
               <BackButton onClick={onBack} size="lg" />
               <span className="lb-title">Leaderboard</span>
