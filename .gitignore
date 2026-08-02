@@ -25,3 +25,7 @@ dist-ssr
 
 # TypeScript incremental build info
 *.tsbuildinfo
+
+# Agent skills installed via `npx skills add`
+.agents/
+.claude/skills/

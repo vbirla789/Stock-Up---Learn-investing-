@@ -91,13 +91,13 @@ export default function HomeScreen({
             {sections.map((section) => (
               <div className="home-section" key={section.name}>
                 <div className="divider">
-                  <img className="divider-line" src="/assets/divider-sparkle.svg" alt="" />
+                  <span className="divider-line">
+                    <img src="/assets/divider-sparkle.svg" alt="" />
+                  </span>
                   <h2>{section.name}</h2>
-                  <img
-                    className="divider-line flip"
-                    src="/assets/divider-sparkle.svg"
-                    alt=""
-                  />
+                  <span className="divider-line flip">
+                    <img src="/assets/divider-sparkle-right.svg" alt="" />
+                  </span>
                 </div>
 
                 <div className="level-grid">

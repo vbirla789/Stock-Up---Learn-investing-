@@ -1,26 +1,26 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="70.9991" height="23" viewBox="0 0 70.9991 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group 1948759501">
-<path id="Vector 7771" d="M58.7536 11.5H4.64828e-05" stroke="url(#paint0_linear_0_175)" stroke-width="0.8"/>
+<g id="Group 1948759502">
+<path id="Vector 7771" d="M58.7536 11.5H4.64828e-05" stroke="url(#paint0_linear_0_135)" stroke-width="0.8"/>
 <g id="Group 1948759492">
-<g id="Vector" opacity="0.6" filter="url(#filter0_f_0_175)">
+<g id="Vector" opacity="0.6" filter="url(#filter0_f_0_135)">
 <path d="M66.9991 11.5C60.7026 12.0652 60.2573 12.5224 59.7087 19C59.1593 12.5224 58.7149 12.0644 52.4184 11.5C58.7149 10.9348 59.1601 10.4776 59.7087 4C60.2581 10.4776 60.7026 10.9356 66.9991 11.5Z" fill="#AED7FA"/>
-<path d="M59.7084 7.94531C59.9353 8.94595 60.2676 9.72724 60.8403 10.3164C61.4162 10.9088 62.1824 11.2527 63.1645 11.4873C63.1835 11.4918 63.2029 11.4955 63.2221 11.5C63.2029 11.5045 63.1835 11.5081 63.1645 11.5127C62.1822 11.7474 61.4163 12.0921 60.8403 12.6846C60.2678 13.2735 59.9353 14.0536 59.7084 15.0537C59.4815 14.0536 59.15 13.2726 58.5776 12.6836C58.0016 12.0911 57.2346 11.7473 56.2524 11.5127C56.2333 11.5081 56.214 11.5045 56.1948 11.5C56.2142 11.4955 56.2341 11.4919 56.2533 11.4873C57.2355 11.2526 58.0016 10.9079 58.5776 10.3154C59.1501 9.72639 59.4816 8.94569 59.7084 7.94531Z" stroke="url(#paint1_linear_0_175)"/>
+<path d="M59.7084 7.94531C59.9353 8.94595 60.2676 9.72724 60.8403 10.3164C61.4162 10.9088 62.1824 11.2527 63.1645 11.4873C63.1835 11.4918 63.2029 11.4955 63.2221 11.5C63.2029 11.5045 63.1835 11.5081 63.1645 11.5127C62.1822 11.7474 61.4163 12.0921 60.8403 12.6846C60.2678 13.2735 59.9353 14.0536 59.7084 15.0537C59.4815 14.0536 59.15 13.2726 58.5776 12.6836C58.0016 12.0911 57.2346 11.7473 56.2524 11.5127C56.2333 11.5081 56.214 11.5045 56.1948 11.5C56.2142 11.4955 56.2341 11.4919 56.2533 11.4873C57.2355 11.2526 58.0016 10.9079 58.5776 10.3154C59.1501 9.72639 59.4816 8.94569 59.7084 7.94531Z" stroke="url(#paint1_linear_0_135)"/>
 </g>
 <path id="Vector_2" d="M59.7084 7.94531C59.9353 8.94595 60.2676 9.72724 60.8403 10.3164C61.4162 10.9088 62.1824 11.2527 63.1645 11.4873C63.1835 11.4918 63.2029 11.4955 63.2221 11.5C63.2029 11.5045 63.1835 11.5081 63.1645 11.5127C62.1822 11.7474 61.4163 12.0921 60.8403 12.6846C60.2678 13.2735 59.9353 14.0536 59.7084 15.0537C59.4815 14.0536 59.15 13.2726 58.5776 12.6836C58.0016 12.0911 57.2346 11.7473 56.2524 11.5127C56.2333 11.5081 56.214 11.5045 56.1948 11.5C56.2142 11.4955 56.2341 11.4919 56.2533 11.4873C57.2355 11.2526 58.0016 10.9079 58.5776 10.3154C59.1501 9.72639 59.4816 8.94569 59.7084 7.94531Z" fill="#CCCCCC" stroke="#CCCCCC"/>
 </g>
 </g>
 <defs>
-<filter id="filter0_f_0_175" x="48.4184" y="0" width="22.5807" height="23" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_f_0_135" x="48.4184" y="0" width="22.5807" height="23" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_0_175"/>
+<feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_0_135"/>
 </filter>
-<linearGradient id="paint0_linear_0_175" x1="58.7536" y1="12.1243" x2="4.57764e-05" y2="12.1243" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_0_135" x1="58.7536" y1="12.1243" x2="4.57764e-05" y2="12.1243" gradientUnits="userSpaceOnUse">
 <stop stop-color="white"/>
 <stop offset="1" stop-color="white" stop-opacity="0.01"/>
 <stop offset="1" stop-color="white" stop-opacity="0.01"/>
 </linearGradient>
-<linearGradient id="paint1_linear_0_175" x1="52.4184" y1="13.364" x2="66.9991" y2="13.364" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint1_linear_0_135" x1="52.4184" y1="13.364" x2="66.9991" y2="13.364" gradientUnits="userSpaceOnUse">
 <stop stop-color="#AED7FA"/>
 <stop offset="1" stop-color="#AED7FA" stop-opacity="0.01"/>
 <stop offset="1" stop-color="#AED7FA" stop-opacity="0.01"/>

@@ -6,8 +6,12 @@ import {
   PrimaryButton,
   BackButton,
 } from '../components/Chrome'
+import VideoOverlay from '../components/VideoOverlay'
 import levels from '../data/levels'
 import type { Level } from '../types'
+
+/** The explainer that plays behind every video card in the demo. */
+const LESSON_VIDEO_ID = '9yqfiQy0Xjw'
 
 interface LevelScreenProps {
   levelId: number
@@ -29,6 +33,7 @@ export default function LevelScreen({
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
   const [checked, setChecked] = useState(false)
+  const [playing, setPlaying] = useState(false)
 
   const step = level.steps[index]
   const total = level.steps.length
@@ -123,17 +128,21 @@ export default function LevelScreen({
               <img className="hang-line" src="/assets/hang-line.svg" alt="" />
               <span className="hang-knot" />
               <div className="video-card" key={index}>
-                <div className="video-thumb">
+                <button
+                  className="video-thumb"
+                  onClick={() => setPlaying(true)}
+                  aria-label="Play the lesson video"
+                >
                   <img src="/assets/video-thumb.png" alt="" />
                   <span className="video-play">
                     <img
                       src="/assets/icon-play.svg"
                       alt=""
-                      width={24}
-                      height={24}
+                      width={20}
+                      height={20}
                     />
                   </span>
-                </div>
+                </button>
                 <p>{step.caption}</p>
               </div>
             </div>
@@ -182,6 +191,13 @@ export default function LevelScreen({
       </div>
 
       <HomeBar />
+
+      {playing && (
+        <VideoOverlay
+          videoId={LESSON_VIDEO_ID}
+          onClose={() => setPlaying(false)}
+        />
+      )}
     </>
   )
 }
