@@ -1084,54 +1084,74 @@ button {
   }
 }
 
-/* ---------- success ---------- */
+/* ---------- success sheet ---------- */
 
-.success {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 16px;
-}
-
-.success-grain {
+.sheet-backdrop {
   position: absolute;
-  left: -6px;
-  top: 0;
-  width: 382px;
-  height: 804px;
-  opacity: 0.8;
-  background: radial-gradient(
-    50% 60% at 50% -24%,
-    rgba(55, 122, 233, 1) 0%,
-    rgba(41, 86, 162, 0.5) 50%,
-    rgba(26, 51, 92, 0) 100%
-  );
-  pointer-events: none;
-}
-
-.success-glare {
-  position: absolute;
-  left: -17%;
-  top: -2%;
-  width: 137%;
-  pointer-events: none;
-}
-
-.success-body {
-  flex: 1;
-  min-height: 0;
+  inset: 0;
+  z-index: 40;
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.88);
+  animation: fade 0.2s ease;
+}
+
+.sheet {
+  width: 100%;
+  animation: sheet-up 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.sheet-grabber {
+  height: 28px;
+  display: flex;
   align-items: center;
-  gap: 40px;
-  padding: 64px 20px 0;
+  justify-content: center;
 }
 
-.success-badge {
+.sheet-grabber span {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: #a6a6a6;
+}
+
+/* 48 above the badge, 47 below, 48 before the buttons, 24 at the foot */
+.sheet-body {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px 28px 0 0;
+  padding: 48px 16px 24px;
+  background: radial-gradient(
+    120% 62% at 50% 6%,
+    #16295c 0%,
+    #0a1740 42%,
+    #050a24 100%
+  );
+}
+
+.sheet-glare {
+  position: absolute;
+  left: -73.5px;
+  top: -136.77px;
+  width: 513px;
+  height: 512px;
+  pointer-events: none;
+}
+
+.sheet-badge {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 47px;
   animation: pop 0.5s cubic-bezier(0.2, 0.9, 0.35, 1.25);
 }
 
@@ -1147,11 +1167,11 @@ button {
 }
 
 .success-rank {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  width: 100%;
+  gap: 12px;
 }
 
 .success-rank-line {
@@ -1179,19 +1199,28 @@ button {
   color: #dff6fe;
 }
 
-.success-note {
-  margin: 0;
-  width: 260px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--dim);
+.sheet-actions {
+  position: relative;
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.success-note em {
-  font-style: normal;
-  color: #ffd324;
+.sheet-home-indicator {
+  height: 33px;
+  background: #050a24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.sheet-home-indicator span {
+  width: 134px;
+  height: 5px;
+  border-radius: 8px;
+  background: #fff;
 }
 
 /* ---------- leaderboard ---------- */

@@ -67,5 +67,4 @@ export interface Board {
 export type View =
   | { name: 'home' }
   | { name: 'level'; levelId: number }
-  | { name: 'success'; levelId: number }
   | { name: 'leaderboard' }

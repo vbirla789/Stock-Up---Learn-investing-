@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import HomeScreen from './screens/HomeScreen'
 import LevelScreen from './screens/LevelScreen'
-import SuccessScreen from './screens/SuccessScreen'
+import SuccessSheet from './screens/SuccessSheet'
 import LeaderboardScreen from './screens/LeaderboardScreen'
 import { XP_PER_LEVEL } from './data/levels'
 import { rankFor } from './data/leaderboard'
@@ -31,6 +31,9 @@ function load(): Progress {
 export default function App() {
   const [state, setState] = useState<Progress>(load)
   const [view, setView] = useState<View>({ name: 'home' })
+  // Completion is a sheet over the lesson, so the level screen stays mounted
+  // behind it rather than being swapped out for a success screen.
+  const [sheetLevel, setSheetLevel] = useState<number | null>(null)
 
   useEffect(() => {
     try {
@@ -50,12 +53,17 @@ export default function App() {
         doneToday: true,
       }
     })
-    setView({ name: 'success', levelId: id })
+    setSheetLevel(id)
+  }
+
+  function go(next: View) {
+    setSheetLevel(null)
+    setView(next)
   }
 
   function reset() {
     setState(initial)
-    setView({ name: 'home' })
+    go({ name: 'home' })
   }
 
   function share(levelId: number) {
@@ -80,27 +88,25 @@ export default function App() {
           )}
 
           {view.name === 'level' && (
-            <LevelScreen
-              levelId={view.levelId}
-              onExit={() => setView({ name: 'home' })}
-              onComplete={completeLevel}
-            />
-          )}
-
-          {view.name === 'success' && (
-            <SuccessScreen
-              levelId={view.levelId}
-              onClose={() => setView({ name: 'home' })}
-              onLeaderboard={() => setView({ name: 'leaderboard' })}
-              onShare={() => share(view.levelId)}
-            />
+            <>
+              <LevelScreen
+                levelId={view.levelId}
+                onExit={() => go({ name: 'home' })}
+                onComplete={completeLevel}
+              />
+              {sheetLevel !== null && (
+                <SuccessSheet
+                  levelId={sheetLevel}
+                  onClose={() => go({ name: 'home' })}
+                  onLeaderboard={() => go({ name: 'leaderboard' })}
+                  onShare={() => share(sheetLevel)}
+                />
+              )}
+            </>
           )}
 
           {view.name === 'leaderboard' && (
-            <LeaderboardScreen
-              onBack={() => setView({ name: 'home' })}
-              xp={state.xp}
-            />
+            <LeaderboardScreen onBack={() => go({ name: 'home' })} xp={state.xp} />
           )}
         </div>
       </div>
