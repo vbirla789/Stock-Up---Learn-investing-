@@ -240,7 +240,6 @@ button {
 }
 
 .statusbar-time {
-  font-family: 'Geist', sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.3px;
@@ -335,6 +334,16 @@ button {
   color: #fff;
 }
 
+/* Counters keep a fixed digit width so pills don't jump as numbers change */
+.pill,
+.rank-pill-body,
+.progress-count,
+.podium-points,
+.hex-num,
+.lb-row-body {
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- pills ---------- */
 
 .pill {
@@ -347,7 +356,6 @@ button {
   border-radius: 24px;
   background: var(--alpha16);
   border: 1px solid var(--alpha16);
-  font-family: 'Geist', sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
@@ -463,7 +471,6 @@ button {
   border: 1px solid rgba(62, 77, 142, 0.8);
   background: linear-gradient(180deg, #0b1d68 24.84%, #04091d 50%);
   padding: 12px;
-  font-family: 'Geist', sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
@@ -503,7 +510,6 @@ button {
 }
 
 .level-name {
-  font-family: 'Geist', sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
@@ -564,7 +570,6 @@ button {
   left: 0;
   right: 0;
   text-align: center;
-  font-family: 'Geist', sans-serif;
   font-size: 34px;
   font-weight: 600;
   line-height: 1;
@@ -648,7 +653,6 @@ button {
 }
 
 .progress-count {
-  font-family: 'Geist', sans-serif;
   font-size: 18px;
   font-weight: 600;
   line-height: 22px;
@@ -1200,7 +1204,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Geist', sans-serif;
   font-size: 14px;
 }
 
