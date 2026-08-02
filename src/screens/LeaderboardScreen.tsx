@@ -14,14 +14,15 @@ const badge: Record<Tier, string> = {
   grey: '/assets/badge-grey.svg',
 }
 
-// Podium geometry, relative to the 335 x 268 podium frame in Figma.
+// Podium geometry, all relative to the 335 x 268 podium frame. The blocks
+// bottom out at exactly 268, so the frame is filled edge to edge.
 const blocks = [
   {
     place: 2,
     left: 4,
-    top: 104,
+    top: 168,
     h: 100,
-    capTop: 87,
+    capTop: 151,
     capH: 17,
     cap: '/assets/podium-top-2.svg',
     fill: 'rgba(34, 197, 94, 0.8)',
@@ -30,9 +31,9 @@ const blocks = [
   {
     place: 1,
     left: 116,
-    top: 70,
+    top: 134,
     h: 134,
-    capTop: 50,
+    capTop: 114,
     capH: 20,
     cap: '/assets/podium-top-1.svg',
     fill: '#22c55e',
@@ -41,9 +42,9 @@ const blocks = [
   {
     place: 3,
     left: 228,
-    top: 120,
+    top: 184,
     h: 84,
-    capTop: 106,
+    capTop: 170,
     capH: 14,
     cap: '/assets/podium-top-3.svg',
     fill: 'rgba(34, 197, 94, 0.93)',
@@ -90,8 +91,6 @@ export default function LeaderboardScreen({
       >
         <div className="lb-content">
           <div className="lb-podium">
-            <img className="podium-bg" src="/assets/podium-bg.svg" alt="" />
-
             {blocks.map((b) => (
               <div key={b.place}>
                 <img

@@ -1220,14 +1220,6 @@ button {
   height: 268px;
 }
 
-.lb-podium > img.podium-bg {
-  position: absolute;
-  left: -15px;
-  top: -121px;
-  width: 375px;
-  height: 423px;
-}
-
 .lb-header {
   position: absolute;
   left: 0;
