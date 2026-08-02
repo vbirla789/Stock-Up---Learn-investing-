@@ -1,0 +1,22 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="92.618" height="95.618" viewBox="0 0 92.618 95.618" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Union" opacity="0.32" filter="url(#filter0_d_0_126)">
+<path d="M46.309 1.94259C48.5916 1.94263 50.8772 2.57637 52.9291 3.84884L82.8569 22.4026H82.8578C86.9656 24.9477 89.5209 29.6758 89.5209 34.8186V58.4914C89.5209 63.6341 86.9649 68.3605 82.8569 70.9074L52.9291 89.4602C50.8773 90.7326 48.5915 91.3664 46.309 91.3664C44.169 91.3664 42.0259 90.8097 40.0756 89.6916L39.6879 89.4602L9.76116 70.9074C5.65313 68.3606 3.09727 63.6348 3.0971 58.4904V34.8166C3.0972 29.6739 5.65305 24.9475 9.76116 22.4006L39.6879 3.84884C41.7399 2.57626 44.0262 1.94259 46.309 1.94259Z" stroke="#63615F" stroke-width="1.57589" shape-rendering="crispEdges"/>
+<path d="M46.309 1.94259C48.5916 1.94263 50.8772 2.57637 52.9291 3.84884L82.8569 22.4026H82.8578C86.9656 24.9477 89.5209 29.6758 89.5209 34.8186V58.4914C89.5209 63.6341 86.9649 68.3605 82.8569 70.9074L52.9291 89.4602C50.8773 90.7326 48.5915 91.3664 46.309 91.3664C44.169 91.3664 42.0259 90.8097 40.0756 89.6916L39.6879 89.4602L9.76116 70.9074C5.65313 68.3606 3.09727 63.6348 3.0971 58.4904V34.8166C3.0972 29.6739 5.65305 24.9475 9.76116 22.4006L39.6879 3.84884C41.7399 2.57626 44.0262 1.94259 46.309 1.94259Z" stroke="url(#paint0_radial_0_126)" stroke-opacity="0.4" stroke-width="1.57589" shape-rendering="crispEdges"/>
+</g>
+<defs>
+<filter id="filter0_d_0_126" x="0" y="0" width="92.618" height="95.618" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1.15451"/>
+<feGaussianBlur stdDeviation="1.15451"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_126"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_126" result="shape"/>
+</filter>
+<radialGradient id="paint0_radial_0_126" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(46.309 97.9208) rotate(-90) scale(98.7416 210.623)">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

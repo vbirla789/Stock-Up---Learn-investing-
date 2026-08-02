@@ -1,15 +1,18 @@
-// Curriculum: 4 chapters x 3 levels. Every level is 5 steps — 2 teaching cards
-// (one text signboard, one video card) followed by 3 questions.
+// Curriculum: two sections of six levels. Every level is 5 steps — 2 teaching
+// cards (one text signboard, one video card) followed by 3 questions.
 // XP is fixed at 100 a level, matching the success screen in the design.
+//
+// Level numbers and section names come from array position, so reordering a
+// level here can't leave a stale id or chapter behind.
 
 import type { Level } from '../types'
 
 export const XP_PER_LEVEL = 100
+export const SECTIONS = ['Stock market basics', 'Start investing'] as const
+const PER_SECTION = 6
 
-const levels: Level[] = [
+const source: Omit<Level, 'id' | 'chapter'>[] = [
   {
-    id: 1,
-    chapter: 'Basics',
     title: "What's a share",
     steps: [
       {
@@ -64,8 +67,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 2,
-    chapter: 'Basics',
     title: 'Who owns Zomato',
     steps: [
       {
@@ -120,8 +121,55 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 3,
-    chapter: 'Basics',
+    title: 'Where shares trade',
+    steps: [
+      {
+        type: 'context',
+        lead: 'Where do shares ',
+        accent: 'change hands?',
+        body: 'On an exchange. In India there are two — NSE and BSE. Every app you have heard of just talks to them.',
+      },
+      {
+        type: 'video',
+        caption: 'An exchange is the marketplace where buyers and sellers meet.',
+      },
+      {
+        type: 'quiz',
+        lead: 'India has how many ',
+        accent: 'main exchanges?',
+        options: ['One', 'Two', 'Five', 'One per state'],
+        answer: 1,
+        why: 'NSE and BSE. Most big companies are listed on both.',
+      },
+      {
+        type: 'quiz',
+        lead: 'What does an exchange ',
+        accent: 'actually do?',
+        options: [
+          'Sets the price of every share',
+          'Owns the companies listed on it',
+          'Matches buyers with sellers',
+          'Lends you money to invest',
+        ],
+        answer: 2,
+        why: 'It is a matchmaker, not an owner. Prices come from what people agree to pay.',
+      },
+      {
+        type: 'quiz',
+        lead: 'Your investing app ',
+        accent: 'is…',
+        options: [
+          'The exchange itself',
+          'A broker that talks to the exchange',
+          'A bank',
+          'The company you are buying',
+        ],
+        answer: 1,
+        why: 'Apps are brokers. They pass your order to NSE or BSE and hold the shares in your demat account.',
+      },
+    ],
+  },
+  {
     title: 'How buying works',
     steps: [
       {
@@ -176,8 +224,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 4,
-    chapter: 'Buy & sell',
     title: 'How selling works',
     steps: [
       {
@@ -232,8 +278,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 5,
-    chapter: 'Buy & sell',
     title: 'Why prices move',
     steps: [
       {
@@ -288,8 +332,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 6,
-    chapter: 'Indexes',
     title: "What's an index",
     steps: [
       {
@@ -344,8 +386,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 7,
-    chapter: 'Indexes',
     title: 'Sensex vs Nifty',
     steps: [
       {
@@ -390,64 +430,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 8,
-    chapter: 'Indexes',
-    title: "What's a SIP",
-    steps: [
-      {
-        type: 'context',
-        lead: 'What is ',
-        accent: 'a SIP?',
-        body: 'A fixed amount invested every month, automatically. Small money, long time, no decisions.',
-      },
-      {
-        type: 'video',
-        caption: 'The same amount, every month, whatever the market is doing.',
-      },
-      {
-        type: 'quiz',
-        lead: 'A SIP means investing ',
-        accent: 'how?',
-        options: [
-          'A lump sum once',
-          'A fixed amount every month',
-          'Only when prices fall',
-          'Whenever you feel like it',
-        ],
-        answer: 1,
-        why: 'The point is that it is automatic. You remove yourself from the decision.',
-      },
-      {
-        type: 'quiz',
-        lead: 'The biggest advantage of a SIP ',
-        accent: 'is…',
-        options: [
-          'It guarantees profit',
-          'It beats every stock',
-          'You buy through highs and lows',
-          'It has no risk',
-        ],
-        answer: 2,
-        why: 'You buy more units when prices are low and fewer when high, without ever timing it.',
-      },
-      {
-        type: 'quiz',
-        lead: 'A good SIP amount to start with ',
-        accent: 'is…',
-        options: [
-          'Whatever you can repeat every month',
-          'As much as possible',
-          'Everything you have',
-          'Money you need next week',
-        ],
-        answer: 0,
-        why: 'A SIP you can keep going for years beats a big one you stop in three months.',
-      },
-    ],
-  },
-  {
-    id: 9,
-    chapter: 'Your SIP',
     title: 'Mutual funds',
     steps: [
       {
@@ -502,60 +484,61 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 10,
-    chapter: 'Your SIP',
-    title: 'Global Indexes',
+    title: "What's a SIP",
     steps: [
       {
         type: 'context',
-        lead: 'Scoreboards ',
-        accent: 'everywhere',
-        body: 'S&P 500 in the US, Nikkei in Japan, FTSE in the UK. Every market keeps its own score.',
+        lead: 'What is ',
+        accent: 'a SIP?',
+        body: 'A fixed amount invested every month, automatically. Small money, long time, no decisions.',
       },
       {
         type: 'video',
-        caption: 'The same idea as Nifty, in a different country.',
+        caption: 'The same amount, every month, whatever the market is doing.',
       },
       {
         type: 'quiz',
-        lead: 'The S&P 500 tracks companies in ',
-        accent: 'which country?',
-        options: ['India', 'Japan', 'United States', 'United Kingdom'],
-        answer: 2,
-        why: 'S&P 500 is the main US scoreboard, the way Nifty 50 is India’s.',
-      },
-      {
-        type: 'quiz',
-        lead: 'Why would you hold ',
-        accent: 'a global index?',
+        lead: 'A SIP means investing ',
+        accent: 'how?',
         options: [
-          'It always beats India',
-          'It spreads risk across countries',
-          'It has no risk',
-          'It is cheaper',
+          'A lump sum once',
+          'A fixed amount every month',
+          'Only when prices fall',
+          'Whenever you feel like it',
         ],
         answer: 1,
-        why: 'If one country has a bad decade, the others may not. Same logic as one basket beating one bet.',
+        why: 'The point is that it is automatic. You remove yourself from the decision.',
       },
       {
         type: 'quiz',
-        lead: 'World markets tend to fall ',
-        accent: 'together when…',
+        lead: 'The biggest advantage of a SIP ',
+        accent: 'is…',
         options: [
-          'A global shock hits',
-          'One company reports badly',
-          'Interest rates change in one city',
-          'Never',
+          'It guarantees profit',
+          'It beats every stock',
+          'You buy through highs and lows',
+          'It has no risk',
+        ],
+        answer: 2,
+        why: 'You buy more units when prices are low and fewer when high, without ever timing it.',
+      },
+      {
+        type: 'quiz',
+        lead: 'A good SIP amount to start with ',
+        accent: 'is…',
+        options: [
+          'Whatever you can repeat every month',
+          'As much as possible',
+          'Everything you have',
+          'Money you need next week',
         ],
         answer: 0,
-        why: 'Diversification helps, but in a true global shock almost everything falls at once.',
+        why: 'A SIP you can keep going for years beats a big one you stop in three months.',
       },
     ],
   },
   {
-    id: 11,
-    chapter: 'Your SIP',
-    title: 'The 2020 test',
+    title: 'The 2020 crash',
     steps: [
       {
         type: 'context',
@@ -609,8 +592,6 @@ const levels: Level[] = [
     ],
   },
   {
-    id: 12,
-    chapter: 'Your SIP',
     title: 'Start your SIP',
     steps: [
       {
@@ -665,5 +646,17 @@ const levels: Level[] = [
     ],
   },
 ]
+
+const levels: Level[] = source.map((level, i) => ({
+  ...level,
+  id: i + 1,
+  chapter: SECTIONS[Math.floor(i / PER_SECTION)],
+}))
+
+/** Levels grouped for the home screen, in section order. */
+export const sections = SECTIONS.map((name) => ({
+  name,
+  levels: levels.filter((l) => l.chapter === name),
+}))
 
 export default levels

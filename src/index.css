@@ -227,6 +227,36 @@ button {
   background: linear-gradient(180deg, rgba(3, 6, 18, 0) 15.93%, #030612 69.45%);
 }
 
+/* Home has its own backdrop: a tall soft glow behind a faint 53.5px grid. */
+.bg-home .bg-glow {
+  left: 0;
+  top: -7px;
+  width: 375px;
+  height: 1018px;
+  background: radial-gradient(
+    234.53px 478.88px at 187.5px 292px,
+    #061037 0%,
+    #00061e 100%
+  );
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.04) 0.343px,
+      transparent 0.343px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.04) 0.343px,
+      transparent 0.343px
+    );
+  background-size: 53.532px 53.532px;
+}
+
 .statusbar {
   position: relative;
   z-index: 2;
@@ -467,20 +497,22 @@ button {
 .nudge {
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   border-radius: 10px;
   border: 1px solid rgba(62, 77, 142, 0.8);
-  background: linear-gradient(180deg, #0b1d68 24.84%, #04091d 50%);
+  background: linear-gradient(180deg, #0b1d68 24.84%, #071136 50%);
   padding: 12px;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.14px;
-  color: rgba(255, 255, 255, 0.91);
+  color: #fff;
 }
 
-.nudge b {
-  color: var(--green);
-  font-weight: 500;
+.nudge > img:first-child {
+  flex-shrink: 0;
 }
 
 .nudge-glare {
@@ -489,6 +521,51 @@ button {
   top: -14px;
   height: 76px;
   pointer-events: none;
+}
+
+.home-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.home-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 34.96px;
+}
+
+.divider-line {
+  flex: 1;
+  min-width: 0;
+  height: 15px;
+}
+
+.divider-line.flip {
+  transform: scaleX(-1);
+}
+
+.divider h2 {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: center;
+  white-space: nowrap;
+  background-image: linear-gradient(179.58deg, #dff6ff 56.68%, #81cfed 113.12%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
 }
 
 .level-grid {
@@ -511,14 +588,15 @@ button {
 
 .level-name {
   font-size: 14px;
-  font-weight: 500;
-  line-height: 18px;
+  font-weight: 600;
+  line-height: 1.3;
   text-align: center;
   color: #fff;
 }
 
 .level-cell.is-locked .level-name {
-  color: rgba(255, 255, 255, 0.42);
+  font-weight: 500;
+  color: var(--muted);
 }
 
 /* ---------- hex badge ---------- */
@@ -585,22 +663,18 @@ button {
   font-size: 51px;
 }
 
-.hex-lock {
+/* Locked badge: seven stacked Figma layers in a 88 x 91 box */
+.hex-locked {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 10px;
+  left: 0;
+  top: 0;
+  width: 88px;
+  height: 91px;
 }
 
-.level-cell.is-locked .hex-art {
-  filter: grayscale(0.9) brightness(0.5);
-}
-
-.level-cell.is-locked .hex-label,
-.level-cell.is-locked .hex-num {
-  opacity: 0;
+.hex-locked img {
+  position: absolute;
+  pointer-events: none;
 }
 
 .hex-tick {
