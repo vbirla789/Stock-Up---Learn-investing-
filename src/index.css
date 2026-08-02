@@ -517,7 +517,6 @@ button {
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  letter-spacing: -0.14px;
   color: #ccc;
 }
 
@@ -572,7 +571,11 @@ button {
   text-align: center;
   white-space: nowrap;
   color: #d9d9d9;
-  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* the frame sets the second section a shade dimmer than the first */
+.home-section:nth-of-type(2) .divider h2 {
+  color: #ccc;
 }
 
 .level-grid {
@@ -621,13 +624,22 @@ button {
   height: 140px;
 }
 
+/* Tighter badge export — the old one carried a big blurred halo */
 .hex-art {
   position: absolute;
+  left: -3.85%;
+  top: -0.46%;
+  width: 107.7%;
+  height: 107.85%;
+  pointer-events: none;
+}
+
+/* the success-screen badge still uses the wide-halo export */
+.hex.lg .hex-art {
   left: -23.67%;
   top: -22.64%;
   width: 147.34%;
   height: 145.27%;
-  pointer-events: none;
 }
 
 .hex-label {
