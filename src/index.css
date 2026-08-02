@@ -621,13 +621,13 @@ button {
 
 .hex-label {
   position: absolute;
-  top: 18px;
+  top: 17.97px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 11.06px;
+  font-size: 10.6px;
   font-weight: 700;
-  line-height: 15.31px;
+  line-height: 15.28px;
   letter-spacing: -0.085px;
   color: #fff;
 }
@@ -638,14 +638,17 @@ button {
   line-height: 23.29px;
 }
 
+/* Figma outlines the digit: 26.45px tall with its top at y=40.75 inside the
+   88 x 91.83 badge. Size and offset are solved from Nunito's real metrics so
+   the glyph lands there rather than the line box. */
 .hex-num {
   position: absolute;
-  top: 34px;
+  top: 36.13px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 34px;
-  font-weight: 600;
+  font-size: 37.12px;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.1px;
   background-image: var(--gold);
@@ -654,9 +657,10 @@ button {
   color: transparent;
 }
 
+/* same solve, scaled by the 140/91.83 badge ratio */
 .hex.lg .hex-num {
-  top: 52px;
-  font-size: 51px;
+  top: 55.09px;
+  font-size: 56.6px;
 }
 
 /* Locked badge: seven stacked Figma layers in a 88 x 91 box */
