@@ -150,9 +150,6 @@ button {
   .screen .statusbar > * {
     display: none;
   }
-  .screen .lb-status-space {
-    height: 24px;
-  }
   /* Real devices draw their own home indicator */
   .screen .homebar {
     display: none;
@@ -1110,8 +1107,11 @@ button {
   display: none;
 }
 
+/* The podium stays pinned; the ranked list scrolls up over it. */
 .lb-top {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1;
   height: 414px;
   flex-shrink: 0;
   overflow: hidden;
@@ -1130,14 +1130,18 @@ button {
   left: 0;
   right: 0;
   top: 0;
-  z-index: 5;
+  z-index: 20;
   display: flex;
   flex-direction: column;
+  /* same 16px below the status bar as the level and success screens */
   gap: 16px;
+  padding-bottom: 12px;
+  transition: background 0.2s ease;
 }
 
-.lb-status-space {
-  height: 44px;
+/* once the list slides under it, the header needs its own surface */
+.lb-header.is-stuck {
+  background: #000;
 }
 
 .lb-title-row {
@@ -1278,7 +1282,8 @@ button {
   outline: 1px solid rgba(158, 214, 46, 0.45);
 }
 
-.lb-row img {
+/* direct child only — the YOU diamond nested deeper keeps its own size */
+.lb-row > img {
   width: 24px;
   height: 24px;
   flex-shrink: 0;

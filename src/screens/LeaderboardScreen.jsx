@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { StatusBar, HomeBar, BackButton } from '../components/Chrome'
 import { boardFor } from '../data/leaderboard'
 
@@ -58,12 +59,23 @@ const fallbackAvatars = [
 
 export default function LeaderboardScreen({ onBack, xp }) {
   const { podium, rows } = boardFor(xp)
+  const [stuck, setStuck] = useState(false)
 
   return (
     <>
-      <StatusBar />
+      {/* Sits above the scroll layer so the list can never cover the back button */}
+      <div className={`lb-header ${stuck ? 'is-stuck' : ''}`}>
+        <StatusBar />
+        <div className="lb-title-row">
+          <BackButton onClick={onBack} />
+          <span className="lb-title">Leaderboard</span>
+        </div>
+      </div>
 
-      <div className="lb">
+      <div
+        className="lb"
+        onScroll={(e) => setStuck(e.currentTarget.scrollTop > 330)}
+      >
         <div className="lb-top">
           <img className="podium-bg" src="/assets/podium-bg.svg" alt="" />
 
@@ -113,13 +125,6 @@ export default function LeaderboardScreen({ onBack, xp }) {
             )
           })}
 
-          <div className="lb-header">
-            <div className="lb-status-space" />
-            <div className="lb-title-row">
-              <BackButton onClick={onBack} />
-              <span className="lb-title">Leaderboard</span>
-            </div>
-          </div>
         </div>
 
         <div className="lb-list-wrap">
