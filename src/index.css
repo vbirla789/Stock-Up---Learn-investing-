@@ -201,20 +201,12 @@ button {
   );
 }
 
+/* One 53.5px cell tiled — rounded corners, so the grid breaks at each
+   junction the way the frame's does. Hairline gradients couldn't do that. */
 .bg-grid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.04) 0.343px,
-      transparent 0.343px
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.04) 0.343px,
-      transparent 0.343px
-    );
+  background-image: url('/assets/bg-grid.svg');
   background-size: 53.532px 53.532px;
 }
 

@@ -66,7 +66,14 @@ export default function SuccessSheet({
             </PrimaryButton>
             <button className="btn-secondary" onClick={onShare}>
               Share
-              <img src="/assets/icon-upload.svg" alt="" width={20} height={20} />
+              <span className="pill-icon" style={{ width: 20, height: 20 }}>
+                <img
+                  src="/assets/icon-upload.svg"
+                  alt=""
+                  width={16.81}
+                  height={16.74}
+                />
+              </span>
             </button>
           </div>
         </div>
