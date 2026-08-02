@@ -71,10 +71,10 @@ export default function HomeScreen({
               </span>
               <span className="rank-pill-chevron">
                 <img
-                  src="/assets/icon-arrow.svg"
+                  src="/assets/icon-arrow-light.svg"
                   alt=""
-                  width={8.75}
-                  height={4.4}
+                  width={10.13}
+                  height={5.63}
                   style={{ transform: 'rotate(90deg)' }}
                 />
               </span>

@@ -472,20 +472,18 @@ button {
 }
 
 .rank-pill {
-  width: 88px;
   height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 8px 10px 8px 8px;
+  gap: 2px;
+  padding: 8px 8px 8px 12px;
   border-radius: 24px;
   background: var(--alpha16);
   border: 1px solid var(--alpha16);
 }
 
 .rank-pill-body {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -496,6 +494,7 @@ button {
   color: #e6e6e6;
 }
 
+/* plain 18px arrow — the green circular badge behind it is gone */
 .rank-pill-chevron {
   width: 18px;
   height: 18px;
@@ -503,9 +502,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 24px;
-  background: var(--green);
-  border: 0.727px solid rgba(255, 255, 255, 0.08);
 }
 
 .nudge {
