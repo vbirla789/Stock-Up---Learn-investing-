@@ -80,28 +80,28 @@ export function PrimaryButton({ children, onClick, disabled }) {
   )
 }
 
-export function BackButton({ onClick, size = 'sm' }) {
+export function BackButton({ onClick }) {
   return (
-    <button
-      className={size === 'lg' ? 'icon-btn lg' : 'icon-btn'}
-      onClick={onClick}
-      aria-label="Back"
-    >
-      <img
-        src="/assets/icon-arrow-light.svg"
-        alt=""
-        width={13.5}
-        height={7.5}
-        style={{ transform: 'rotate(-90deg)' }}
-      />
+    <button className="icon-btn" onClick={onClick} aria-label="Back">
+      <i>
+        <img
+          src="/assets/icon-arrow-light.svg"
+          alt=""
+          width={13.5}
+          height={7.5}
+          style={{ transform: 'rotate(-90deg)' }}
+        />
+      </i>
     </button>
   )
 }
 
 export function CloseButton({ onClick }) {
   return (
-    <button className="icon-btn lg" onClick={onClick} aria-label="Close">
-      <img src="/assets/icon-cross.svg" alt="" width={12} height={12} />
+    <button className="icon-btn" onClick={onClick} aria-label="Close">
+      <i>
+        <img src="/assets/icon-cross.svg" alt="" width={11.5} height={11.5} />
+      </i>
     </button>
   )
 }

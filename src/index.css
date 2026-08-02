@@ -153,6 +153,17 @@ button {
   .screen .lb-status-space {
     height: 24px;
   }
+  /* Real devices draw their own home indicator */
+  .screen .homebar {
+    display: none;
+  }
+  /* ...so the footer takes over its clearance from the gesture bar */
+  .screen .footer {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  .screen .lb-list-wrap {
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* ---------- shared chrome ---------- */
@@ -348,8 +359,8 @@ button {
 }
 
 .icon-btn {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -359,9 +370,13 @@ button {
   border: 1px solid var(--alpha16);
 }
 
-.icon-btn.lg {
-  width: 40px;
-  height: 40px;
+/* 24x24 icon slot inside the 40x40 container */
+.icon-btn i {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ---------- home ---------- */
