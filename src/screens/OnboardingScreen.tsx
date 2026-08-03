@@ -1,168 +1,118 @@
-import { useEffect, useRef, useState } from 'react'
-import { StatusBar, HomeBar, ScreenBg, PrimaryButton } from '../components/Chrome'
+import { useEffect, useState } from 'react'
+import { StatusBar, HomeBar } from '../components/Chrome'
 
 interface OnboardingScreenProps {
   onDone: () => void
 }
 
-/**
- * ₹2,000 a month, compounded monthly at ~12.9% a year — the rate implied by
- * the frame's ₹4,65,000 at ten years. `spent` is simply what you handed over.
- */
-const PERIODS = [
-  { years: 20, spent: 480000, invested: 2027000, note: '(~4×)' },
-  { years: 10, spent: 240000, invested: 465000, note: '(~double)' },
-  { years: 5, spent: 120000, invested: 164000, note: '(~1.4×)' },
+interface Slide {
+  /** Headline split into runs so the green phrases can be marked up inline. */
+  parts: { text: string; accent?: boolean }[]
+  art: string
+  /** The illustration's native ratio — each frame sizes its own art box. */
+  ratio: string
+}
+
+const SLIDES: Slide[] = [
+  {
+    parts: [
+      { text: 'Owning a company ' },
+      { text: 'starts at ₹100', accent: true },
+      { text: ', not ₹1 crore.' },
+    ],
+    art: '/assets/onb/step1.png',
+    ratio: '532 / 508',
+  },
+  {
+    parts: [
+      { text: 'Money compounds itself.', accent: true },
+      { text: ' You just wait.' },
+    ],
+    art: '/assets/onb/step2.png',
+    ratio: '736 / 820',
+  },
+  {
+    parts: [
+      { text: 'Your first investment ' },
+      { text: 'costs one Zomato order.', accent: true },
+    ],
+    art: '/assets/onb/step3.png',
+    ratio: '760 / 790',
+  },
+  {
+    parts: [
+      { text: 'Invest now to be ' },
+      { text: '15 years ahead', accent: true },
+      { text: ' of most people.' },
+    ],
+    art: '/assets/onb/step4.png',
+    ratio: '660 / 788',
+  },
 ]
-const DEFAULT_PERIOD = 1
 
-/** Tallest bar in px; the grey one is scaled off the same rupee-per-px. */
-const MAX_BAR = 328
+/** The wordmark frame has no button, so it hands over on a timer. */
+const SPLASH_MS = 1500
 
-const SPENT_DELAY = 150
-const SPENT_DURATION = 700
-const INVESTED_DELAY = 400
-const INVESTED_DURATION = 900
-
-const inr = new Intl.NumberFormat('en-IN')
-
-function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
-
-/**
- * Counts 0 -> target on the same curve and clock as the bar it labels.
- * rAF gets throttled in background tabs, so a timer guarantees the final
- * value lands even if frames stop arriving.
- */
-function useCountUp(target: number, delay: number, duration: number) {
-  const [value, setValue] = useState(0)
-  const frame = useRef<number | undefined>(undefined)
-
-  useEffect(() => {
-    if (prefersReducedMotion()) {
-      setValue(target)
-      return
-    }
-
-    setValue(0)
-    let start: number | null = null
-    const tick = (now: number) => {
-      if (start === null) start = now
-      const t = Math.min(1, (now - start) / duration)
-      setValue(Math.round(target * (1 - Math.pow(1 - t, 3))))
-      if (t < 1) frame.current = requestAnimationFrame(tick)
-    }
-
-    const startTimer = window.setTimeout(() => {
-      frame.current = requestAnimationFrame(tick)
-    }, delay)
-    const settleTimer = window.setTimeout(() => {
-      if (frame.current) cancelAnimationFrame(frame.current)
-      setValue(target)
-    }, delay + duration + 80)
-
-    return () => {
-      window.clearTimeout(startTimer)
-      window.clearTimeout(settleTimer)
-      if (frame.current) cancelAnimationFrame(frame.current)
-    }
-  }, [target, delay, duration])
-
-  return value
-}
+const SPLASH = -1
 
 export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
-  const [periodIndex, setPeriodIndex] = useState(DEFAULT_PERIOD)
-  const period = PERIODS[periodIndex]
+  const [step, setStep] = useState(SPLASH)
 
-  const spent = useCountUp(period.spent, SPENT_DELAY, SPENT_DURATION)
-  const invested = useCountUp(period.invested, INVESTED_DELAY, INVESTED_DURATION)
+  useEffect(() => {
+    if (step !== SPLASH) return
+    const t = window.setTimeout(() => setStep(0), SPLASH_MS)
+    return () => window.clearTimeout(t)
+  }, [step])
 
-  const spentHeight = Math.round((period.spent / period.invested) * MAX_BAR)
+  const slide = SLIDES[step]
 
   return (
-    <>
-      <ScreenBg />
+    <div className="onb">
+      <div className="onb-dots" />
       <StatusBar />
 
-      <div className="onb">
-        <h1 className="onb-title">Why you should learn investing?</h1>
-
-        <div className="onb-toggle" role="tablist" aria-label="Time horizon">
-          {PERIODS.map((p, i) => (
-            <button
-              key={p.years}
-              role="tab"
-              aria-selected={i === periodIndex}
-              className={i === periodIndex ? 'is-active' : ''}
-              onClick={() => setPeriodIndex(i)}
-            >
-              {p.years} years
-            </button>
-          ))}
+      {step === SPLASH ? (
+        <div className="onb-splash">
+          <h1>Stock up</h1>
         </div>
-
-        <div className="onb-chart">
-          <div className="onb-col">
-            <span
-              className="onb-amount"
-              style={{ animationDelay: `${SPENT_DELAY}ms` }}
-            >
-              <b>₹{inr.format(spent)}</b> gone
-            </span>
-            <div
-              /* key restarts the grow keyframe when the horizon changes */
-              key={`spent-${period.years}`}
-              className="onb-bar is-spent"
-              style={
-                {
-                  '--bar-h': `${spentHeight}px`,
-                  animationDelay: `${SPENT_DELAY}ms`,
-                  animationDuration: `${SPENT_DURATION}ms`,
-                } as React.CSSProperties
-              }
-            >
-              <span>over {period.years} years</span>
+      ) : (
+        <div className="onb-body">
+          <div className="onb-head">
+            {/* The track stays mounted across steps so the fill can slide. */}
+            <div className="onb-progress">
+              <span
+                style={{ width: `${((step + 1) / SLIDES.length) * 100}%` }}
+              />
             </div>
+            <h1 className="onb-title" key={`title-${step}`}>
+              {slide.parts.map((part, i) => (
+                <span key={i} className={part.accent ? 'is-accent' : undefined}>
+                  {part.text}
+                </span>
+              ))}
+            </h1>
           </div>
 
-          <div className="onb-col">
-            <span
-              className="onb-amount"
-              style={{ animationDelay: `${INVESTED_DELAY}ms` }}
-            >
-              <b>₹{inr.format(invested)}</b> yours
-              <br />
-              {period.note}
-            </span>
-            <div
-              key={`invested-${period.years}`}
-              className="onb-bar is-invested"
-              style={
-                {
-                  '--bar-h': `${MAX_BAR}px`,
-                  animationDelay: `${INVESTED_DELAY}ms`,
-                  animationDuration: `${INVESTED_DURATION}ms`,
-                } as React.CSSProperties
-              }
-            >
-              <span>over {period.years} years</span>
-            </div>
-          </div>
-        </div>
+          <img
+            className="onb-art"
+            key={`art-${step}`}
+            src={slide.art}
+            alt=""
+            style={{ aspectRatio: slide.ratio }}
+          />
 
-        <div className="onb-captions">
-          <p>₹2000 monthly zomato expense</p>
-          <p>Save that ₹2000 and start SIP</p>
+          <button
+            className="onb-next"
+            onClick={() =>
+              step === SLIDES.length - 1 ? onDone() : setStep(step + 1)
+            }
+          >
+            Next
+          </button>
         </div>
-      </div>
-
-      <div className="footer onb-footer">
-        <PrimaryButton onClick={onDone}>Next</PrimaryButton>
-      </div>
+      )}
 
       <HomeBar />
-    </>
+    </div>
   )
 }

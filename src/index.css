@@ -1,3 +1,13 @@
+/* Nunito carries the app (loaded in index.html); Sansation is self-hosted and
+   used only for the onboarding headlines, which the Figma sets in it. */
+@font-face {
+  font-family: 'Sansation';
+  src: url('/fonts/Sansation-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --ink: #030612;
   --card: #101423;
@@ -162,6 +172,13 @@ button {
   .screen .footer {
     padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
+  /* Phones draw their own status bar, so the 24px rule applies from the top */
+  .screen .home-head {
+    padding-top: 24px;
+  }
+  .screen .home-scroll {
+    padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+  }
   .screen .lb-content {
     padding-top: calc(88px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
@@ -180,15 +197,6 @@ button {
 .bg-glow {
   position: absolute;
   inset: 0;
-}
-
-/* Home has its own backdrop: a tall soft glow behind a faint 53.5px grid. */
-.bg-home .bg-glow {
-  background: radial-gradient(
-    62.5% 47% at 50% 28.7%,
-    #061037 0%,
-    #00061e 100%
-  );
 }
 
 /* Lesson, quiz and success share the grid, with the glow pinned to the top. */
@@ -335,19 +343,19 @@ button {
 /* ---------- pills ---------- */
 
 .pill {
-  height: 34px;
+  height: 41px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 8px 10px 8px 8px;
-  border-radius: 24px;
-  background: var(--alpha16);
-  border: 1px solid var(--alpha16);
+  padding: 10px 12px 10px 8px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e6e3e6;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
-  color: #e6e6e6;
+  color: #000;
 }
 
 /* Icons are exported as bare glyphs; this restores the Figma icon box so the
@@ -381,34 +389,50 @@ button {
 }
 
 /* ---------- home ---------- */
+/* The path screen shares the onboarding's light stock. Pills and the nudge are
+   pinned; only the climb scrolls, so the movement itself reads as the path. */
 
 .home {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  padding-top: 24px;
-  overflow-y: auto;
-  scrollbar-width: none;
+  background: #fffcfe;
+  color: #000;
+  overflow: hidden;
 }
 
-.home::-webkit-scrollbar {
-  display: none;
+.home-dots {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/onb-dots.svg');
+  background-size: 11.35px 11.35px;
+  background-position: 2.48px 0;
+  pointer-events: none;
 }
 
-.home-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  padding: 0 20px 24px;
+.home .statusbar {
+  background: none;
+  color: #000;
+}
+
+.home .statusbar-icons {
+  filter: invert(1);
+}
+
+.home .homebar span {
+  background: #000;
 }
 
 .home-head {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding: 16px 20px 0;
 }
 
 .home-head-row {
@@ -424,155 +448,158 @@ button {
 }
 
 .rank-pill {
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 10px 8px 10px 12px;
   gap: 2px;
-  padding: 8px 8px 8px 12px;
-  border-radius: 24px;
-  background: var(--alpha16);
-  border: 1px solid var(--alpha16);
 }
 
 .rank-pill-body {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 4px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: #e6e6e6;
 }
 
-/* plain 18px arrow — the green circular badge behind it is gone */
 .rank-pill-chevron {
   width: 18px;
   height: 18px;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* Nudge card: 1px rim with a hard 4px lip under it */
 .nudge {
-  position: relative;
-  overflow: hidden;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 10px;
-  border: 1px solid rgba(62, 77, 142, 0.8);
-  background: linear-gradient(180deg, #0b1d68 24.84%, #071136 50%);
+  flex-direction: column;
+  gap: 4px;
   padding: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 18px;
-  color: #ccc;
+  border: 1px solid #7954bf;
+  border-radius: 20px;
+  background: #fffdfe;
+  box-shadow: 0 4px 0 0 #7954bf;
+  text-align: center;
 }
 
-.nudge > img:first-child {
-  flex-shrink: 0;
-}
-
-.nudge-glare {
-  position: absolute;
-  right: -1px;
-  top: -14px;
-  height: 76px;
-  pointer-events: none;
-}
-
-.home-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.home-section {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 34.96px;
-}
-
-/* 15px box with the artwork overhanging it, per the frame's -26.67% inset */
-.divider-line {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  height: 15px;
-}
-
-/* Art fits its box so the gap to the title reads 8px on both sides —
-   overhanging it made the left gap collapse to 4. */
-.divider-line img {
-  position: absolute;
-  top: -26.67%;
-  bottom: -26.67%;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 23px;
-}
-
-.divider-line.flip {
-  transform: scaleX(-1);
-}
-
-.divider h2 {
+.nudge p {
   margin: 0;
-  flex-shrink: 0;
-  font-size: 20px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.nudge-lead {
   font-weight: 700;
-  line-height: 32px;
-  text-align: center;
-  white-space: nowrap;
-  color: #d9d9d9;
+  color: #7954bf;
 }
 
-/* the frame sets the second section a shade dimmer than the first */
-.home-section:nth-of-type(2) .divider h2 {
-  color: #ccc;
+.nudge-sub {
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-weight: 700;
+  color: #000;
 }
 
-.level-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 16px;
-  row-gap: 22px;
+/* ---------- the climb ---------- */
+
+/* 36 = the column's 20 plus the path's own 16 inset */
+.home-scroll {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  padding: 24px 36px 48px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
-.level-cell {
+.home-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.path {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.path-row {
+  display: flex;
+}
+
+.path-row.is-left {
+  justify-content: flex-start;
+}
+
+.path-row.is-center {
+  justify-content: center;
+}
+
+.path-row.is-right {
+  justify-content: flex-end;
+}
+
+.path-node {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  transition: transform 140ms var(--ease-out);
 }
 
-.level-cell:disabled {
-  cursor: default;
+.path-node:active {
+  transform: scale(0.94);
 }
 
-.level-name {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.3;
-  text-align: center;
-  color: #e6e6e6;
+/* The stones are rendered art and each state crops its source differently,
+   so the box is fixed and the image is placed inside it. */
+.stone {
+  position: relative;
+  width: 102px;
+  height: 64px;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
-.level-cell.is-locked .level-name {
+.stone img {
+  position: absolute;
+  max-width: none;
+}
+
+.is-locked .stone img {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.is-current .stone img {
+  left: -5.37%;
+  top: -6.49%;
+  width: 110.74%;
+  height: 114.29%;
+}
+
+.is-done .stone img {
+  left: -10.44%;
+  top: -23.13%;
+  width: 116.67%;
+  height: 136.17%;
+}
+
+.path-name {
+  font-size: 16px;
   font-weight: 600;
-  color: #666;
+  line-height: 1.4;
+  color: #b7b4b8;
+  white-space: nowrap;
+}
+
+/* Only the level you can play right now gets the ink */
+.is-current .path-name {
+  font-weight: 700;
+  color: #000;
 }
 
 /* ---------- hex badge ---------- */
@@ -678,10 +705,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.level-cell.is-current .hex {
-  animation: bob 2.4s ease-in-out infinite;
 }
 
 @keyframes bob {
@@ -1458,7 +1481,8 @@ button {
   }
 }
 
-.home-inner,
+.home-head,
+.home-scroll,
 .level-body,
 .lb-content,
 .quiz {
@@ -1541,64 +1565,76 @@ button {
 }
 
 /* ---------- onboarding ---------- */
-/* Segmented horizon picker — track 261x35, active pill 83x25 */
-.onb-toggle {
-  align-self: center;
-  display: flex;
-  gap: 0;
-  padding: 5px;
-  margin-bottom: 22px;
-  border-radius: 999px;
-  background: #2c3148;
-  animation: fade 400ms var(--ease-out) both;
-  animation-delay: 80ms;
-}
-
-.onb-toggle button {
-  min-width: 83px;
-  height: 25px;
-  padding: 0 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #b9c0d6;
-  transition:
-    background 0.18s var(--ease-out),
-    color 0.18s var(--ease-out);
-}
-
-.onb-toggle button.is-active {
-  background: #f2f2f2;
-  color: #101423;
-  font-weight: 700;
-}
-
+/* The only light screen in the app: white stock, a faint dot grid, and
+   Sansation for the headlines — straight off the Figma section. */
 
 .onb {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  padding: 34px 28px 0;
+  background: #fffcfe;
+  color: #000;
   overflow: hidden;
 }
 
-.onb-title {
-  margin: 0 0 20px;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.4;
-  text-align: center;
-  color: #e6e6e6;
-  animation: slide-up 320ms var(--ease-out) both;
+/* 11.35px pitch, 1.35px dots; the frame's grid lands 2.48px off the left. */
+.onb-dots {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/onb-dots.svg');
+  background-size: 11.35px 11.35px;
+  background-position: 2.48px 0;
+  pointer-events: none;
 }
 
-@keyframes slide-up {
+/* The status icons are solid-white art, so one filter flips the whole set
+   to ink — cellular, wifi and the inline-styled battery alike. */
+.onb .statusbar {
+  background: none;
+  color: #000;
+}
+
+.onb .statusbar-icons {
+  filter: invert(1);
+}
+
+/* Figma floats the home indicator over the content rather than reserving
+   a row for it, so the CTA can sit its full 24px off the bottom. */
+.onb .homebar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.onb .homebar span {
+  background: #000;
+}
+
+.onb-splash {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding-top: 280px;
+}
+
+.onb-splash h1 {
+  margin: 0;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.4;
+  animation: onb-wordmark 620ms var(--ease-out) both;
+}
+
+@keyframes onb-wordmark {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px) scale(0.96);
   }
   to {
     opacity: 1;
@@ -1606,123 +1642,99 @@ button {
   }
 }
 
-/* bars sit on a shared baseline and grow up from it */
-.onb-chart {
+.onb-body {
+  position: relative;
+  z-index: 2;
   flex: 1;
   min-height: 0;
   display: flex;
-  align-items: flex-end;
-  gap: 41px;
-}
-
-.onb-col {
-  flex: 1;
-  min-width: 0;
-  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  padding: 40px 20px 24px;
 }
 
-.onb-amount {
-  margin-bottom: 20px;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
-  text-align: center;
-  color: #e6e6e6;
-  font-variant-numeric: tabular-nums;
-  animation: fade 400ms var(--ease-out) both;
-}
-
-.onb-amount b {
-  font-weight: 700;
-}
-
-/* CSS keyframes rather than a JS-triggered transition, so growth doesn't
-   depend on requestAnimationFrame firing on mount */
-.onb-bar {
-  width: 100%;
-  height: var(--bar-h);
-  position: relative;
+.onb-head {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  animation-name: bar-grow;
-  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
-  animation-fill-mode: both;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
 }
 
-@keyframes bar-grow {
+.onb-progress {
+  height: 6px;
+  border-radius: 20px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.onb-progress span {
+  display: block;
+  height: 100%;
+  border-radius: 20px;
+  background: #3c3f45;
+  transition: width 420ms var(--ease-out);
+}
+
+.onb-title {
+  margin: 0;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.4;
+  color: #000;
+  animation: onb-rise 380ms var(--ease-out) both;
+  animation-delay: 60ms;
+}
+
+.onb-title .is-accent {
+  color: #428a5a;
+}
+
+.onb-art {
+  width: 100%;
+  min-height: 0;
+  object-fit: contain;
+  animation: onb-rise 460ms var(--ease-out) both;
+  animation-delay: 140ms;
+}
+
+@keyframes onb-rise {
   from {
-    height: 0;
+    opacity: 0;
+    transform: translateY(14px);
   }
   to {
-    height: var(--bar-h);
+    opacity: 1;
+    transform: none;
   }
 }
 
-.onb-bar span {
-  font-size: 13px;
-  font-weight: 600;
+/* The light screen's counterpart to .btn-primary: a flat dark pill. */
+/* 338 in a 335 column — the frame lets the pill sit 1.5px proud either side */
+.onb-next {
+  width: 338px;
+  max-width: calc(100% + 3px);
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: #292929;
   color: #fff;
-  white-space: nowrap;
-  animation: fade 500ms var(--ease-out) both;
-  animation-delay: 700ms;
-}
-
-/* the lighter band is the top face of the bar, so it stays pinned up there */
-.onb-bar::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 18px;
-}
-
-.onb-bar.is-spent {
-  background: #5f5f5f;
-}
-
-.onb-bar.is-spent::before {
-  background: #979797;
-}
-
-.onb-bar.is-invested {
-  background: #22c55e;
-}
-
-.onb-bar.is-invested::before {
-  background: #6fd996;
-  height: 20px;
-}
-
-.onb-captions {
-  display: flex;
-  gap: 41px;
-  margin-top: 18px;
-}
-
-.onb-captions p {
-  flex: 1;
-  min-width: 0;
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 700;
   line-height: 1.4;
-  text-align: center;
-  color: #cfd4e4;
-  animation: fade 400ms var(--ease-out) both;
+  transition: transform 140ms var(--ease-out);
 }
 
-.onb-footer {
-  animation: fade 400ms var(--ease-out) both;
-  animation-delay: 1000ms;
+.onb-next:active {
+  transform: scale(0.97);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .onb-bar {
-    animation: none !important;
-    height: var(--bar-h) !important;
+@media (max-width: 767px) {
+  /* Phones draw their own status bar, so the 24px rule applies from the top */
+  .screen .onb-body {
+    padding-top: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
 }
