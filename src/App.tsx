@@ -6,6 +6,7 @@ import SuccessSheet from './screens/SuccessSheet'
 import LeaderboardScreen from './screens/LeaderboardScreen'
 import { XP_PER_LEVEL } from './data/levels'
 import { rankFor } from './data/leaderboard'
+import navigate from './lib/navigate'
 import type { Progress, View } from './types'
 
 const KEY = 'nocap-progress-v1'
@@ -62,16 +63,34 @@ export default function App() {
     setSheetLevel(id)
   }
 
+  // Home is the root of the map, so anything heading back to it reads as a
+  // reverse move; everything else pushes forward.
   function go(next: View) {
-    setSheetLevel(null)
-    setView(next)
+    navigate(
+      () => {
+        setSheetLevel(null)
+        setView(next)
+      },
+      next.name === 'home' ? 'back' : 'forward',
+    )
+  }
+
+  // The last onboarding card hands straight over to the first lesson.
+  function startFirstLevel() {
+    navigate(() => {
+      setOnboarding(false)
+      setView({ name: 'level', levelId: 1 })
+    })
   }
 
   function reset() {
-    setState(initial)
-    setOnboarding(true)
-    setRunId((n) => n + 1)
-    go({ name: 'home' })
+    navigate(() => {
+      setState(initial)
+      setOnboarding(true)
+      setRunId((n) => n + 1)
+      setSheetLevel(null)
+      setView({ name: 'home' })
+    }, 'back')
   }
 
   function share(levelId: number) {
@@ -91,13 +110,13 @@ export default function App() {
               : view.name + ('levelId' in view ? view.levelId : '')
           }
         >
-          {onboarding && <OnboardingScreen onDone={() => setOnboarding(false)} />}
+          {onboarding && <OnboardingScreen onDone={startFirstLevel} />}
 
           {!onboarding && view.name === 'home' && (
             <HomeScreen
               state={{ ...state, rank: rankFor(state.xp) }}
-              onOpenLevel={(id) => setView({ name: 'level', levelId: id })}
-              onOpenLeaderboard={() => setView({ name: 'leaderboard' })}
+              onOpenLevel={(id) => go({ name: 'level', levelId: id })}
+              onOpenLeaderboard={() => go({ name: 'leaderboard' })}
             />
           )}
 

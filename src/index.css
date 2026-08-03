@@ -32,8 +32,13 @@
   --screen-w: 375px;
   --screen-h: 804px;
 
-  /* Entrances decelerate — nothing in the app eases in. */
-  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Entrances decelerate — nothing in the app eases in. The built-in CSS
+     easings are too soft to read as intentional, so these are the stronger
+     variants: out for enters, in-out for on-screen moves, drawer for sheets. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press: 160ms;
   --dur-enter: 260ms;
 }
 
@@ -59,6 +64,33 @@ button {
   border: none;
   padding: 0;
   cursor: pointer;
+}
+
+/* Every pressable surface answers the finger. Transform only — it skips
+   layout and paint, so the feedback lands on the very next frame. */
+.btn-pill,
+.btn-ghost,
+.icon-btn-light,
+.rank-pill,
+.quiz-option,
+.path-node,
+.video-thumb,
+.onb-next {
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.btn-pill:not(:disabled):active,
+.btn-ghost:active,
+.icon-btn-light:active,
+.rank-pill:active,
+.video-thumb:active {
+  transform: scale(0.97);
+}
+
+/* Bigger targets take a deeper press so the feedback stays legible */
+.path-node:active,
+.quiz-option:not(:disabled):active {
+  transform: scale(0.96);
 }
 
 /* ---------- stage / device frame ---------- */
@@ -124,8 +156,10 @@ button {
   font-weight: 600;
 }
 
-.reset-btn:hover {
-  color: #fff;
+@media (hover: hover) and (pointer: fine) {
+  .reset-btn:hover {
+    color: #fff;
+  }
 }
 
 @media (max-width: 767px) {
@@ -398,7 +432,6 @@ button {
   font-size: 18px;
   font-weight: 700;
   line-height: 1.4;
-  transition: transform 140ms var(--ease-out);
 }
 
 .btn-pill:disabled {
@@ -406,9 +439,6 @@ button {
   cursor: not-allowed;
 }
 
-.btn-pill:not(:disabled):active {
-  transform: scale(0.97);
-}
 
 /* Light icon button: 40 box, 12 radius, hairline rim */
 .icon-btn-light {
@@ -553,11 +583,6 @@ button {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  transition: transform 140ms var(--ease-out);
-}
-
-.path-node:active {
-  transform: scale(0.94);
 }
 
 /* The stones are rendered art and each state crops its source differently,
@@ -876,7 +901,10 @@ button {
   line-height: 1.4;
   color: #000;
   text-align: left;
+  /* transform is restated here because this rule would otherwise clobber the
+     shared press transition declared further up */
   transition:
+    transform var(--dur-press) var(--ease-out),
     border-color 0.16s var(--ease-out),
     background 0.16s var(--ease-out);
 }
@@ -933,7 +961,23 @@ button {
   flex-direction: column;
   justify-content: flex-end;
   background: rgba(0, 0, 0, 0.6);
-  animation: fade 0.2s ease;
+  animation: fade 280ms var(--ease-out) both;
+}
+
+/* The whole stack travels its own height, so it clears the screen no matter
+   how tall the card gets. The drawer curve is the iOS one — a long, flat
+   tail that settles instead of stopping. */
+.sheet-stack {
+  animation: sheet-up 420ms var(--ease-drawer) both;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
 }
 
 /* The grabber and the home indicator ride on the scrim, above and below the
@@ -962,18 +1006,6 @@ button {
   border-radius: 24px;
   background: #fff;
   overflow: hidden;
-  animation: sheet-up 0.34s var(--ease-out);
-}
-
-@keyframes sheet-up {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: none;
-    opacity: 1;
-  }
 }
 
 /* Hung off the card's top-left corner, so the rays fan out behind the badge */
@@ -992,13 +1024,14 @@ button {
   display: flex;
   justify-content: center;
   margin-bottom: 27px;
-  animation: pop 0.5s cubic-bezier(0.2, 0.9, 0.35, 1.25);
+  animation: pop 440ms cubic-bezier(0.2, 0.9, 0.35, 1.25) 220ms backwards;
 }
 
+/* 0.86, not 0: nothing in the world appears out of nothing */
 @keyframes pop {
   from {
     opacity: 0;
-    transform: scale(0.7);
+    transform: scale(0.86);
   }
   to {
     opacity: 1;
@@ -1078,11 +1111,6 @@ button {
   font-weight: 700;
   line-height: 28px;
   color: #292929;
-  transition: transform 140ms var(--ease-out);
-}
-
-.btn-ghost:active {
-  transform: scale(0.97);
 }
 
 .sheet-home-indicator {
@@ -1352,12 +1380,53 @@ button {
 
 /* ---------- motion ---------- */
 
-/* Content slides in from the right on every screen and every lesson step,
-   so forward movement always reads as forward. */
+/* Screen changes cross over instead of cutting. The whole screen is one
+   snapshot, so the phone frame never gets painted over, and the outgoing
+   copy leaves faster than the incoming one arrives — an exit should never
+   hold up an enter. */
+.screen {
+  view-transition-name: screen;
+}
+
+::view-transition-old(screen),
+::view-transition-new(screen) {
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-old(screen) {
+  animation: vt-out 150ms var(--ease-out) both;
+}
+
+::view-transition-new(screen) {
+  animation: vt-in 260ms var(--ease-out) both;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Content slides in from the side you came from, so forward reads as forward
+   and back reads as back. `navigate()` sets [data-nav] before the snapshot. */
+:root {
+  --slide-from: 18px;
+}
+
+html[data-nav='back'] {
+  --slide-from: -18px;
+}
+
 @keyframes slide-in {
   from {
     opacity: 0;
-    transform: translateX(18px);
+    transform: translateX(var(--slide-from));
   }
   to {
     opacity: 1;
@@ -1365,17 +1434,19 @@ button {
   }
 }
 
+/* `backwards`, not `both` — a filled animation would outrank the :active
+   transform and swallow every press for the life of the screen. */
 .home-head,
 .home-scroll,
 .level-body,
 .lb-content,
 .quiz {
-  animation: slide-in var(--dur-enter) var(--ease-out) both;
+  animation: slide-in var(--dur-enter) var(--ease-out) backwards;
 }
 
 /* options cascade in behind the question rather than landing as a block */
 .quiz-option {
-  animation: slide-in 220ms var(--ease-out) both;
+  animation: slide-in 220ms var(--ease-out) backwards;
 }
 
 .quiz-option:nth-child(1) { animation-delay: 40ms; }
@@ -1383,6 +1454,65 @@ button {
 .quiz-option:nth-child(3) { animation-delay: 110ms; }
 .quiz-option:nth-child(4) { animation-delay: 145ms; }
 .quiz-option:nth-child(5) { animation-delay: 180ms; }
+
+/* the top of the board cascades; past six rows the delay would out-stay
+   the screen, so the rest simply arrive with the list */
+.lb-row {
+  animation: rise 260ms var(--ease-out) backwards;
+}
+
+.lb-row:nth-child(1) { animation-delay: 30ms; }
+.lb-row:nth-child(2) { animation-delay: 65ms; }
+.lb-row:nth-child(3) { animation-delay: 100ms; }
+.lb-row:nth-child(4) { animation-delay: 135ms; }
+.lb-row:nth-child(5) { animation-delay: 170ms; }
+.lb-row:nth-child(6) { animation-delay: 205ms; }
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reduced motion keeps the fades — they explain what changed — and drops
+   everything that moves. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(screen),
+  ::view-transition-new(screen) {
+    animation: none;
+  }
+
+  .home-head,
+  .home-scroll,
+  .level-body,
+  .lb-content,
+  .quiz,
+  .quiz-option,
+  .lb-row,
+  .sheet-stack,
+  .sheet-badge,
+  .onb-title,
+  .onb-art,
+  .onb-splash h1 {
+    animation: fade 200ms var(--ease-out) backwards;
+  }
+
+  .path-node:active,
+  .quiz-option:not(:disabled):active,
+  .btn-pill:not(:disabled):active,
+  .btn-ghost:active,
+  .icon-btn-light:active,
+  .rank-pill:active,
+  .video-thumb:active {
+    transform: none;
+  }
+}
+
 
 /* ---------- video overlay ---------- */
 
@@ -1481,13 +1611,13 @@ button {
   font-weight: 700;
   font-size: 64px;
   line-height: 1.4;
-  animation: onb-wordmark 620ms var(--ease-out) both;
+  animation: onb-wordmark 620ms var(--ease-out) backwards;
 }
 
 @keyframes onb-wordmark {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(0.96);
+    transform: translateY(10px) scale(0.94);
   }
   to {
     opacity: 1;
@@ -1536,19 +1666,19 @@ button {
   font-size: 28px;
   line-height: 1.4;
   color: #000;
-  animation: onb-rise 380ms var(--ease-out) both;
+  animation: onb-rise 380ms var(--ease-out) backwards;
   animation-delay: 60ms;
 }
 
 .onb-title .is-accent {
-  color: #428a5a;
+  color: #3da57b;
 }
 
 .onb-art {
   width: 100%;
   min-height: 0;
   object-fit: contain;
-  animation: onb-rise 460ms var(--ease-out) both;
+  animation: onb-rise 460ms var(--ease-out) backwards;
   animation-delay: 140ms;
 }
 
@@ -1563,10 +1693,8 @@ button {
   }
 }
 
-/* 338 in a 335 column — the frame lets the pill sit 1.5px proud either side */
 .onb-next {
-  width: 338px;
-  max-width: calc(100% + 3px);
+  width: 100%;
 }
 
 @media (max-width: 767px) {

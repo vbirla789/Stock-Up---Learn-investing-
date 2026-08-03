@@ -65,6 +65,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
   }, [step])
 
   const slide = SLIDES[step]
+  const last = step === SLIDES.length - 1
 
   return (
     <div className="light-screen onb">
@@ -103,11 +104,9 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
 
           <button
             className="btn-pill onb-next"
-            onClick={() =>
-              step === SLIDES.length - 1 ? onDone() : setStep(step + 1)
-            }
+            onClick={() => (last ? onDone() : setStep(step + 1))}
           >
-            Next
+            {last ? 'Explore Level 1' : 'Next'}
           </button>
         </div>
       )}

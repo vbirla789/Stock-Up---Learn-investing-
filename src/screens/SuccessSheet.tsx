@@ -19,11 +19,13 @@ export default function SuccessSheet({
 }: SuccessSheetProps) {
   return (
     <div className="sheet-backdrop" onClick={onClose}>
-      <div className="sheet-grabber">
-        <span />
-      </div>
+      {/* grabber, card and indicator ride up as one piece */}
+      <div className="sheet-stack">
+        <div className="sheet-grabber">
+          <span />
+        </div>
 
-      <div className="sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="sheet" onClick={(e) => e.stopPropagation()}>
         <div className="dot-grid" />
         <img className="sheet-glare" src="/assets/success/glare.svg" alt="" />
 
@@ -65,10 +67,11 @@ export default function SuccessSheet({
             />
           </button>
         </div>
-      </div>
+        </div>
 
-      <div className="sheet-home-indicator">
-        <span />
+        <div className="sheet-home-indicator">
+          <span />
+        </div>
       </div>
     </div>
   )
