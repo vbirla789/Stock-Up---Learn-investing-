@@ -5,10 +5,19 @@ interface OnboardingScreenProps {
   onDone: () => void
 }
 
-const SPENT = 240000
-const INVESTED = 465000
-/** Tallest bar in px; the other is scaled off the same rupee-per-px. */
-const MAX_BAR = 385
+/**
+ * ₹2,000 a month, compounded monthly at ~12.9% a year — the rate implied by
+ * the frame's ₹4,65,000 at ten years. `spent` is simply what you handed over.
+ */
+const PERIODS = [
+  { years: 20, spent: 480000, invested: 2027000, note: '(~4×)' },
+  { years: 10, spent: 240000, invested: 465000, note: '(~double)' },
+  { years: 5, spent: 120000, invested: 164000, note: '(~1.4×)' },
+]
+const DEFAULT_PERIOD = 1
+
+/** Tallest bar in px; the grey one is scaled off the same rupee-per-px. */
+const MAX_BAR = 328
 
 const SPENT_DELAY = 150
 const SPENT_DURATION = 700
@@ -36,6 +45,7 @@ function useCountUp(target: number, delay: number, duration: number) {
       return
     }
 
+    setValue(0)
     let start: number | null = null
     const tick = (now: number) => {
       if (start === null) start = now
@@ -63,10 +73,13 @@ function useCountUp(target: number, delay: number, duration: number) {
 }
 
 export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
-  const spent = useCountUp(SPENT, SPENT_DELAY, SPENT_DURATION)
-  const invested = useCountUp(INVESTED, INVESTED_DELAY, INVESTED_DURATION)
+  const [periodIndex, setPeriodIndex] = useState(DEFAULT_PERIOD)
+  const period = PERIODS[periodIndex]
 
-  const spentHeight = Math.round((SPENT / INVESTED) * MAX_BAR)
+  const spent = useCountUp(period.spent, SPENT_DELAY, SPENT_DURATION)
+  const invested = useCountUp(period.invested, INVESTED_DELAY, INVESTED_DURATION)
+
+  const spentHeight = Math.round((period.spent / period.invested) * MAX_BAR)
 
   return (
     <>
@@ -76,15 +89,31 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
       <div className="onb">
         <h1 className="onb-title">Why you should learn investing?</h1>
 
+        <div className="onb-toggle" role="tablist" aria-label="Time horizon">
+          {PERIODS.map((p, i) => (
+            <button
+              key={p.years}
+              role="tab"
+              aria-selected={i === periodIndex}
+              className={i === periodIndex ? 'is-active' : ''}
+              onClick={() => setPeriodIndex(i)}
+            >
+              {p.years} years
+            </button>
+          ))}
+        </div>
+
         <div className="onb-chart">
           <div className="onb-col">
             <span
               className="onb-amount"
               style={{ animationDelay: `${SPENT_DELAY}ms` }}
             >
-              ₹{inr.format(spent)} gone
+              <b>₹{inr.format(spent)}</b> gone
             </span>
             <div
+              /* key restarts the grow keyframe when the horizon changes */
+              key={`spent-${period.years}`}
               className="onb-bar is-spent"
               style={
                 {
@@ -94,7 +123,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
                 } as React.CSSProperties
               }
             >
-              <span>over 10 years</span>
+              <span>over {period.years} years</span>
             </div>
           </div>
 
@@ -103,11 +132,12 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
               className="onb-amount"
               style={{ animationDelay: `${INVESTED_DELAY}ms` }}
             >
-              ₹{inr.format(invested)} yours
+              <b>₹{inr.format(invested)}</b> yours
               <br />
-              (~double)
+              {period.note}
             </span>
             <div
+              key={`invested-${period.years}`}
               className="onb-bar is-invested"
               style={
                 {
@@ -117,14 +147,14 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
                 } as React.CSSProperties
               }
             >
-              <span>over 10 years</span>
+              <span>over {period.years} years</span>
             </div>
           </div>
         </div>
 
         <div className="onb-captions">
-          <p style={{ animationDelay: '900ms' }}>₹2000 monthly zomato expense</p>
-          <p style={{ animationDelay: '960ms' }}>Save that ₹2000 and start SIP</p>
+          <p>₹2000 monthly zomato expense</p>
+          <p>Save that ₹2000 and start SIP</p>
         </div>
       </div>
 
