@@ -130,6 +130,7 @@ export default function App() {
                 <SuccessSheet
                   levelId={sheetLevel}
                   onClose={() => go({ name: 'home' })}
+                  onLeaderboard={() => go({ name: 'leaderboard' })}
                   onShare={() => share(sheetLevel)}
                 />
               )}

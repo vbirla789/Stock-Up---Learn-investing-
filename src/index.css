@@ -505,10 +505,10 @@ button {
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  border: 1px solid #7954bf;
+  border: 1px solid #3da57b;
   border-radius: 20px;
   background: #fffdfe;
-  box-shadow: 0 4px 0 0 #7954bf;
+  box-shadow: 0 4px 0 0 #3da57b;
   text-align: center;
 }
 
@@ -520,7 +520,7 @@ button {
 
 .nudge-lead {
   font-weight: 700;
-  color: #7954bf;
+  color: #3da57b;
 }
 
 .nudge-sub {
@@ -607,18 +607,11 @@ button {
   object-fit: cover;
 }
 
-.is-current .stone img {
-  left: -5.37%;
-  top: -6.49%;
-  width: 110.74%;
-  height: 114.29%;
-}
-
+.is-current .stone img,
 .is-done .stone img {
-  left: -10.44%;
-  top: -23.13%;
-  width: 116.67%;
-  height: 136.17%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .path-name {
@@ -635,109 +628,57 @@ button {
   color: #000;
 }
 
-/* ---------- hex badge ---------- */
+/* ---------- celebration badge ---------- */
 
 .hex {
   position: relative;
-  display: inline-block;
-  width: 88.08px;
-  height: 91.83px;
+  display: block;
+  width: 139.285px;
+  height: 156px;
   flex-shrink: 0;
 }
 
-.hex.lg {
-  width: 134.29px;
-  height: 140px;
-}
-
-/* Tighter badge export — the old one carried a big blurred halo */
-.hex-art {
+.hex img {
   position: absolute;
-  left: -3.85%;
-  top: -0.46%;
-  width: 107.7%;
-  height: 107.85%;
+  max-width: none;
   pointer-events: none;
 }
 
-/* the success-screen badge still uses the wide-halo export */
-.hex.lg .hex-art {
-  left: -23.67%;
-  top: -22.64%;
-  width: 147.34%;
-  height: 145.27%;
+/* The gold rim and gloss paint over this, so it sits mid-stack */
+.hex-text {
+  position: absolute;
+  left: 44.59px;
+  top: 33.42px;
+  width: 50.713px;
+  height: 86.661px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hex-label {
-  position: absolute;
-  top: 17.97px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 10.6px;
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 19.5px;
   font-weight: 700;
-  line-height: 15.28px;
-  letter-spacing: -0.085px;
+  line-height: 23.468px;
+  letter-spacing: -0.1304px;
   color: #fff;
+  white-space: nowrap;
 }
 
-.hex.lg .hex-label {
-  top: 28.6px;
-  font-size: 16.82px;
-  line-height: 23.29px;
-}
-
-/* Figma outlines the digit: 26.45px tall with its top at y=40.75 inside the
-   88 x 91.83 badge. Size and offset are solved from Nunito's real metrics so
-   the glyph lands there rather than the line box. */
 .hex-num {
-  position: absolute;
-  top: 36.13px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 37.12px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.1px;
-  background-image: var(--gold);
+  min-width: 100%;
+  height: 66.507px;
+  font-family: 'IBM Plex Sans', 'Nunito', sans-serif;
+  font-size: 56.43px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 2.0154px;
+  background-image: linear-gradient(180deg, #fff 64.884%, #b2b2b2 77.273%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-/* same solve, scaled by the 140/91.83 badge ratio */
-.hex.lg .hex-num {
-  top: 55.09px;
-  font-size: 56.6px;
-}
-
-/* Locked badge: seven stacked Figma layers in a 88 x 91 box */
-.hex-locked {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 88px;
-  height: 91px;
-}
-
-.hex-locked img {
-  position: absolute;
-  pointer-events: none;
-}
-
-.hex-tick {
-  position: absolute;
-  right: 2px;
-  bottom: 6px;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--green);
-  border: 2px solid var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 @keyframes bob {
@@ -749,6 +690,7 @@ button {
     transform: translateY(-5px);
   }
 }
+
 
 /* ---------- level runner ---------- */
 
@@ -1013,26 +955,16 @@ button {
   inset: 0;
   z-index: 40;
   display: flex;
-  align-items: flex-end;
-  background: rgba(0, 0, 0, 0.88);
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.6);
   animation: fade 0.2s ease;
 }
 
-.sheet {
-  width: 100%;
-  animation: sheet-up 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-@keyframes sheet-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: none;
-  }
-}
-
+/* The grabber and the home indicator ride on the scrim, above and below the
+   card, exactly as the frame has them. */
 .sheet-grabber {
+  flex-shrink: 0;
   height: 28px;
   display: flex;
   align-items: center;
@@ -1043,29 +975,40 @@ button {
   width: 36px;
   height: 4px;
   border-radius: 999px;
-  background: #a6a6a6;
+  background: rgba(255, 255, 255, 0.6);
 }
 
-/* 48 above the badge, 47 below, 48 before the buttons, 24 at the foot */
-.sheet-body {
+.sheet {
   position: relative;
-  overflow: hidden;
-  border-radius: 28px 28px 0 0;
+  width: 366px;
+  max-width: calc(100% - 9px);
+  margin: 0 auto;
   padding: 48px 16px 24px;
-  background: radial-gradient(
-    120% 62% at 50% 6%,
-    #16295c 0%,
-    #0a1740 42%,
-    #050a24 100%
-  );
+  border-radius: 24px;
+  background: #fff;
+  overflow: hidden;
+  animation: sheet-up 0.34s var(--ease-out);
 }
 
+@keyframes sheet-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Hung off the card's top-left corner, so the rays fan out behind the badge */
 .sheet-glare {
   position: absolute;
   left: -73.5px;
   top: -136.77px;
   width: 513px;
   height: 512px;
+  max-width: none;
   pointer-events: none;
 }
 
@@ -1073,7 +1016,7 @@ button {
   position: relative;
   display: flex;
   justify-content: center;
-  margin-bottom: 47px;
+  margin-bottom: 27px;
   animation: pop 0.5s cubic-bezier(0.2, 0.9, 0.35, 1.25);
 }
 
@@ -1101,24 +1044,39 @@ button {
   align-items: center;
   justify-content: center;
   gap: 12px;
+  width: 100%;
+}
+
+/* The rules either side stretch to fill whatever the label leaves over */
+.success-rank-line img {
+  flex: 1;
+  min-width: 0;
+  height: 22.389px;
+}
+
+.success-rank-line img:last-child {
+  transform: scaleX(-1);
 }
 
 .success-rank-line p {
   margin: 0;
-  font-size: 18px;
+  flex-shrink: 0;
+  font-size: 20px;
   font-weight: 600;
-  line-height: 22px;
-  color: #c3c9e2;
+  line-height: 1.4;
+  color: #000;
+  white-space: nowrap;
 }
 
 .success-xp {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 32px;
-  font-weight: 800;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
   line-height: 1.4;
-  color: #dff6fe;
+  color: #000;
 }
 
 .sheet-actions {
@@ -1126,16 +1084,39 @@ button {
   margin-top: 48px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-.sheet-home-indicator {
-  height: 33px;
-  background: #050a24;
+/* Outlined counterpart to .btn-pill */
+.btn-ghost {
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 8px;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid #c7c8c8;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.06);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #292929;
+  transition: transform 140ms var(--ease-out);
+}
+
+.btn-ghost:active {
+  transform: scale(0.97);
+}
+
+.sheet-home-indicator {
+  flex-shrink: 0;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
 }
 
 .sheet-home-indicator span {

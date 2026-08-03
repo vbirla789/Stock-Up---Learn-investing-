@@ -10,8 +10,8 @@ interface HomeScreenProps {
 }
 
 const STONE: Record<LevelState, string> = {
-  done: '/assets/path/stone-done.png',
-  current: '/assets/path/stone-current.png',
+  done: '/assets/path/stone-done.svg',
+  current: '/assets/path/stone-current.svg',
   locked: '/assets/path/stone-locked.png',
 }
 

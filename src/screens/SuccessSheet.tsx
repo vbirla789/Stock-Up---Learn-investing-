@@ -1,82 +1,74 @@
-import { PrimaryButton } from '../components/Chrome'
 import HexBadge from '../components/HexBadge'
 import { XP_PER_LEVEL } from '../data/levels'
 
 interface SuccessSheetProps {
   levelId: number
   onClose: () => void
+  onLeaderboard: () => void
   onShare: () => void
 }
 
 // Level completion is a bottom sheet over the dimmed lesson, not its own
-// screen. Vertical rhythm is the Figma frame's: 48 above the badge, 47 below
-// it, 48 before the buttons, 24 at the foot.
+// screen. The card is the frame's 366 x 501: 48 above the badge, 27 below it,
+// 48 between the copy and the buttons, 24 at the foot.
 export default function SuccessSheet({
   levelId,
   onClose,
+  onLeaderboard,
   onShare,
 }: SuccessSheetProps) {
   return (
     <div className="sheet-backdrop" onClick={onClose}>
+      <div className="sheet-grabber">
+        <span />
+      </div>
+
       <div className="sheet" onClick={(e) => e.stopPropagation()}>
-        <div className="sheet-grabber">
-          <span />
+        <div className="dot-grid" />
+        <img className="sheet-glare" src="/assets/success/glare.svg" alt="" />
+
+        <div className="sheet-badge">
+          <HexBadge number={levelId} />
         </div>
 
-        <div className="sheet-body">
-          <img className="sheet-glare" src="/assets/success-glare.svg" alt="" />
-
-          <div className="sheet-badge">
-            <HexBadge number={levelId} state="current" large />
+        <div className="success-rank">
+          <div className="success-rank-line">
+            <img src="/assets/success/sparkle-left.svg" alt="" />
+            <p>You’ve completed Level {levelId}</p>
+            <img src="/assets/success/sparkle-right.svg" alt="" />
           </div>
-
-          <div className="success-rank">
-            <div className="success-rank-line">
+          <div className="success-xp">
+            {/* 24 box, 13.5 glyph — so the 4px gap is measured off the box */}
+            <span className="pill-icon" style={{ width: 24, height: 24 }}>
               <img
-                src="/assets/sparkle-left.svg"
+                src="/assets/success/icon-flash-lg.svg"
                 alt=""
-                width={40}
-                height={15}
+                width={13.5}
+                height={21.5}
               />
-              <p>You’ve completed Level {levelId}</p>
-              <img
-                src="/assets/sparkle-right.svg"
-                alt=""
-                width={40}
-                height={15}
-                style={{ transform: 'scaleX(-1)' }}
-              />
-            </div>
-            <div className="success-xp">
-              <img
-                src="/assets/icon-flash-lg.svg"
-                alt=""
-                width={16}
-                height={26}
-              />
-              {XP_PER_LEVEL}
-            </div>
-          </div>
-
-          <div className="sheet-actions">
-            <PrimaryButton onClick={onClose}>Next</PrimaryButton>
-            <button className="btn-secondary" onClick={onShare}>
-              Share
-              <span className="pill-icon" style={{ width: 20, height: 20 }}>
-                <img
-                  src="/assets/icon-upload.svg"
-                  alt=""
-                  width={16.81}
-                  height={16.74}
-                />
-              </span>
-            </button>
+            </span>
+            {XP_PER_LEVEL}
           </div>
         </div>
 
-        <div className="sheet-home-indicator">
-          <span />
+        <div className="sheet-actions">
+          <button className="btn-pill" onClick={onLeaderboard}>
+            View leaderboard
+          </button>
+          <button className="btn-ghost" onClick={onShare}>
+            Share with friends
+            <img
+              src="/assets/success/icon-upload.svg"
+              alt=""
+              width={14.01}
+              height={13.95}
+            />
+          </button>
         </div>
+      </div>
+
+      <div className="sheet-home-indicator">
+        <span />
       </div>
     </div>
   )
