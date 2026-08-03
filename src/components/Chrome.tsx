@@ -88,8 +88,7 @@ export function PrimaryButton({
 }: PrimaryButtonProps) {
   return (
     <button className="btn-primary" onClick={onClick} disabled={disabled}>
-      <img src="/assets/btn-primary.svg" alt="" />
-      <span>{children}</span>
+      {children}
     </button>
   )
 }
