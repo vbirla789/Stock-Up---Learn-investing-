@@ -1,11 +1,5 @@
 import { useState } from 'react'
-import {
-  StatusBar,
-  HomeBar,
-  ScreenBg,
-  PrimaryButton,
-  BackButton,
-} from '../components/Chrome'
+import { StatusBar, HomeBar } from '../components/Chrome'
 import VideoOverlay from '../components/VideoOverlay'
 import levels from '../data/levels'
 import type { Level } from '../types'
@@ -15,6 +9,8 @@ const LESSON_VIDEO_ID = '9yqfiQy0Xjw'
 
 interface LevelScreenProps {
   levelId: number
+  streak: number
+  xp: number
   onExit: () => void
   onComplete: (id: number) => void
 }
@@ -25,10 +21,12 @@ interface LevelScreenProps {
 
 export default function LevelScreen({
   levelId,
+  streak,
+  xp,
   onExit,
   onComplete,
 }: LevelScreenProps) {
-  // levelId always comes from the home grid, so this lookup can't miss
+  // levelId always comes from the path, so this lookup can't miss
   const level = levels.find((l) => l.id === levelId) as Level
   const [index, setIndex] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
@@ -67,127 +65,161 @@ export default function LevelScreen({
     }
   }
 
-  const label = quiz === null
-    ? 'Next'
-    : !checked
-      ? 'Check'
-      : correct
-        ? index + 1 === total
-          ? 'Finish'
-          : 'Next'
-        : 'Try again'
+  const label =
+    quiz === null
+      ? 'Next'
+      : !checked
+        ? 'Check'
+        : correct
+          ? index + 1 === total
+            ? 'Finish'
+            : 'Next'
+          : 'Try again'
 
   const disabled = quiz !== null && picked === null
+  const remaining = total - index - 1
 
   return (
-    <>
-      <ScreenBg />
+    <div className="light-screen lesson">
+      <div className="dot-grid" />
       <StatusBar />
 
-      <div className="level-body">
-        <div className="progress-row">
-          <BackButton onClick={back} />
-          <span className="progress-count">
-            {index + 1}/{total}
-          </span>
-          <div className="progress-track">
-            <div
-              className="progress-fill"
-              style={{ width: `${((index + 1) / total) * 100}%` }}
-            />
+      <div className="lesson-body">
+        <div className="lesson-head">
+          <div className="lesson-head-row">
+            <button className="icon-btn-light" onClick={back} aria-label="Back">
+              <img
+                src="/assets/lesson/icon-back.svg"
+                alt=""
+                width={11.25}
+                height={6.25}
+                style={{ transform: 'rotate(-90deg)' }}
+              />
+            </button>
+
+            <div className="home-head-left">
+              <div className="pill">
+                <span className="pill-icon" style={{ width: 16, height: 16 }}>
+                  <img
+                    src="/assets/icon-fire.svg"
+                    alt=""
+                    width={11.81}
+                    height={15.99}
+                  />
+                </span>
+                {streak}
+              </div>
+              <div className="pill">
+                <span className="pill-icon" style={{ width: 18, height: 18 }}>
+                  <img
+                    src="/assets/icon-flash.svg"
+                    alt=""
+                    width={10.13}
+                    height={16.13}
+                  />
+                </span>
+                {xp}
+              </div>
+            </div>
+          </div>
+
+          {/* Cleared steps are stubs, the current one is a bar, and whatever
+              is still ahead splits the leftover width between itself. */}
+          <div className="steps">
+            {Array.from({ length: index }, (_, i) => (
+              <span className="steps-done" key={`d${i}`} />
+            ))}
+            <span className="steps-now" />
+            {remaining > 0 && (
+              <div className="steps-rest">
+                {Array.from({ length: remaining }, (_, i) => (
+                  <span key={`r${i}`} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="stage-area">
-          {step.type === 'context' && (
-            <div className="signboard-wrap">
-              <div className="signboard" key={index}>
-                <span className="signboard-icon">
-                  <img
-                    src="/assets/icon-book.svg"
-                    alt=""
-                    width={28}
-                    height={28}
-                  />
-                </span>
-                <h1>
-                  {step.lead}
-                  <em>{step.accent}</em>
-                </h1>
-                <p>{step.body}</p>
-              </div>
-              <div className="signboard-legs">
-                <i />
-                <i />
-              </div>
-            </div>
-          )}
-
-          {step.type === 'video' && (
-            <div className="hang">
-              <img className="hang-line" src="/assets/hang-line.svg" alt="" />
-              <span className="hang-knot" />
-              <div className="video-card" key={index}>
-                <button
-                  className="video-thumb"
-                  onClick={() => setPlaying(true)}
-                  aria-label="Play the lesson video"
-                >
-                  <img src="/assets/video-thumb.png" alt="" />
-                  <span className="video-play">
-                    <img
-                      src="/assets/icon-play.svg"
-                      alt=""
-                      width={20}
-                      height={20}
-                    />
-                  </span>
-                </button>
-                <p>{step.caption}</p>
-              </div>
-            </div>
-          )}
-
-          {quiz !== null && (
-            <div className="quiz">
+        {step.type === 'context' && (
+          <div className="lesson-card" key={index}>
+            <span className="lesson-chip">
+              <img
+                src="/assets/lesson/icon-book.svg"
+                alt=""
+                width={32}
+                height={32}
+              />
+            </span>
+            <div className="lesson-copy">
               <h1>
-                {quiz.lead}
-                <em>{quiz.accent}</em>
+                {step.lead}
+                {step.accent}
               </h1>
-              <div className="quiz-options">
-                {quiz.options.map((option, i) => {
-                  let cls = 'quiz-option'
-                  if (!checked && picked === i) cls += ' is-picked'
-                  if (checked && i === quiz.answer) cls += ' is-correct'
-                  if (checked && picked === i && i !== quiz.answer)
-                    cls += ' is-wrong'
-                  return (
-                    <button
-                      key={i}
-                      className={cls}
-                      disabled={checked}
-                      onClick={() => setPicked(i)}
-                    >
-                      {option}
-                    </button>
-                  )
-                })}
-              </div>
-              {checked && (
-                <div className={`quiz-why ${correct ? 'ok' : 'no'}`}>
-                  {correct ? '' : 'Not quite. '}
-                  {quiz.why}
-                </div>
-              )}
+              <p>{step.body}</p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {step.type === 'video' && (
+          <div className="lesson-card is-video" key={index}>
+            <button
+              className="video-thumb"
+              onClick={() => setPlaying(true)}
+              aria-label="Play the lesson video"
+            >
+              <img src="/assets/lesson/video-thumb.png" alt="" />
+              <span className="video-play">
+                <img
+                  src="/assets/lesson/icon-play.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              </span>
+            </button>
+            <p className="video-caption">{step.caption}</p>
+          </div>
+        )}
+
+        {quiz !== null && (
+          <div className="quiz" key={index}>
+            <h1>
+              {quiz.lead}
+              {quiz.accent}
+            </h1>
+            <div className="quiz-options">
+              {quiz.options.map((option, i) => {
+                let cls = 'quiz-option'
+                if (!checked && picked === i) cls += ' is-picked'
+                if (checked && i === quiz.answer) cls += ' is-correct'
+                if (checked && picked === i && i !== quiz.answer)
+                  cls += ' is-wrong'
+                return (
+                  <button
+                    key={i}
+                    className={cls}
+                    disabled={checked}
+                    onClick={() => setPicked(i)}
+                  >
+                    {option}
+                  </button>
+                )
+              })}
+            </div>
+            {checked && (
+              <div className={`quiz-why ${correct ? 'ok' : 'no'}`}>
+                {correct ? '' : 'Not quite. '}
+                {quiz.why}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="footer">
-        <PrimaryButton onClick={advance} disabled={disabled}>
+      <div className="lesson-footer">
+        <button className="btn-pill" onClick={advance} disabled={disabled}>
           {label}
-        </PrimaryButton>
+        </button>
       </div>
 
       <HomeBar />
@@ -198,6 +230,6 @@ export default function LevelScreen({
           onClose={() => setPlaying(false)}
         />
       )}
-    </>
+    </div>
   )
 }

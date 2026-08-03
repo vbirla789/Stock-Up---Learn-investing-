@@ -168,13 +168,13 @@ button {
   .screen .homebar {
     display: none;
   }
-  /* ...so the footer takes over its clearance from the gesture bar */
-  .screen .footer {
-    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  }
   /* Phones draw their own status bar, so the 24px rule applies from the top */
-  .screen .home-head {
+  .screen .home-head,
+  .screen .lesson-body {
     padding-top: 24px;
+  }
+  .screen .lesson-footer {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
   .screen .home-scroll {
     padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
@@ -264,17 +264,6 @@ button {
 }
 
 /* ---------- primary button ---------- */
-
-.footer {
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-  background: var(--ink);
-  padding: 16px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
 /* Rectangular CTA: gradient face, 1.5px rim, hard 8px lip beneath it */
 .btn-primary {
@@ -388,11 +377,11 @@ button {
   justify-content: center;
 }
 
-/* ---------- home ---------- */
-/* The path screen shares the onboarding's light stock. Pills and the nudge are
-   pinned; only the climb scrolls, so the movement itself reads as the path. */
+/* ---------- light screens ---------- */
+/* Onboarding, the path and the lesson runner all sit on the same white stock
+   with the frame's whisper-faint dot grid behind them. */
 
-.home {
+.light-screen {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -403,7 +392,8 @@ button {
   overflow: hidden;
 }
 
-.home-dots {
+/* 11.35px pitch, 1.35px dots; the frame's grid lands 2.48px off the left. */
+.dot-grid {
   position: absolute;
   inset: 0;
   background-image: url('/assets/onb-dots.svg');
@@ -412,18 +402,61 @@ button {
   pointer-events: none;
 }
 
-.home .statusbar {
+/* The status icons are solid-white art, so one filter flips the whole set
+   to ink — cellular, wifi and the inline-styled battery alike. */
+.light-screen .statusbar {
   background: none;
   color: #000;
 }
 
-.home .statusbar-icons {
+.light-screen .statusbar-icons {
   filter: invert(1);
 }
 
-.home .homebar span {
+.light-screen .homebar span {
   background: #000;
 }
+
+/* Flat dark pill — the light screens' counterpart to .btn-primary */
+.btn-pill {
+  width: 100%;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: #292929;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: transform 140ms var(--ease-out);
+}
+
+.btn-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-pill:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Light icon button: 40 box, 12 radius, hairline rim */
+.icon-btn-light {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e6e3e6;
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* ---------- home ---------- */
+/* The path screen shares the onboarding's light stock. Pills and the nudge are
+   pinned; only the climb scrolls, so the movement itself reads as the path. */
 
 .home-head {
   position: relative;
@@ -719,233 +752,150 @@ button {
 
 /* ---------- level runner ---------- */
 
-.level-body {
+.lesson-body {
   position: relative;
   z-index: 2;
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-top: 16px;
-}
-
-.progress-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 0 20px;
-  flex-shrink: 0;
-}
-
-.progress-count {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 22px;
-  color: #ccc;
-}
-
-.progress-track {
-  flex: 1;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  border-radius: 24px;
-  background: var(--alpha16);
-  border: 1px solid var(--alpha16);
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  min-width: 22px;
-  border-radius: 100px;
-  border: 1px solid #000;
-  background: var(--green);
-  box-shadow: inset 0 4px 0 0 rgba(255, 255, 255, 0.35);
-  transition: width 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-.stage-area {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 20px 0;
+  gap: 48px;
+  padding: 16px 20px 0;
   overflow-y: auto;
-  scrollbar-width: none;
+  overscroll-behavior: contain;
 }
 
-.stage-area::-webkit-scrollbar {
+.lesson-body::-webkit-scrollbar {
   display: none;
 }
 
-/* signboard */
-
-.signboard-wrap {
-  flex: 1;
-  min-height: 0;
+.lesson-head {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.signboard {
-  width: 100%;
-  background: var(--card);
-  border: 8px solid var(--edge);
-  border-radius: 28px;
-  padding: 32px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 24px;
-  text-align: center;
-  animation: drop 0.42s cubic-bezier(0.2, 0.9, 0.35, 1.1);
+  flex-shrink: 0;
 }
 
-@keyframes drop {
-  from {
-    opacity: 0;
-    transform: translateY(-18px) rotate(-1.2deg);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.lesson-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.signboard-icon {
-  width: 48px;
-  height: 48px;
+/* Stepper: cleared steps are fixed 56px stubs, the one you are on is a 120px
+   bar, and whatever is left divides the remaining width evenly. */
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.steps span {
+  height: 6px;
+  border-radius: 20px;
+}
+
+.steps-done {
+  width: 56px;
+  flex-shrink: 0;
+  background: #d6d6d6;
+}
+
+.steps-now {
+  width: 120px;
+  flex-shrink: 0;
+  background: #3c3f45;
+}
+
+.steps-rest {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.steps-rest span {
+  flex: 1;
+  min-width: 0;
+  background: #f0f0f0;
+}
+
+/* ---------- teaching card ---------- */
+
+.lesson-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 24px 48px;
+  border: 1px solid #3da57b;
   border-radius: 24px;
-  background: var(--green);
+  background: #fffdfe;
+  box-shadow: 0 4px 0 0 #3da57b;
+  text-align: center;
+  animation: slide-in var(--dur-enter) var(--ease-out) both;
+}
+
+/* The video card breathes wider between its thumbnail and caption */
+.lesson-card.is-video {
+  gap: 24px;
+  overflow: hidden;
+}
+
+.lesson-chip {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  background: #fff;
 }
 
-.signboard h1 {
+.lesson-copy {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lesson-copy h1 {
   margin: 0;
-  font-size: 26px;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1.4;
-  color: #e6e6e6;
 }
 
-.signboard h1 em {
-  font-style: normal;
-  color: var(--green);
-}
-
-.signboard p {
+.lesson-copy p {
   margin: 0;
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--muted);
 }
 
-.signboard-legs {
-  display: flex;
-  gap: 160px;
-  align-items: flex-start;
-}
-
-.signboard-legs i {
-  width: 20px;
-  height: 280px;
-  background: var(--edge);
-}
-
-/* video card */
-
-.hang {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 50px;
-}
-
-.hang-line {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateX(-10px);
-  top: 0;
-  width: 307px;
-  height: 251px;
-  pointer-events: none;
-}
-
-.hang-knot {
-  width: 24px;
-  height: 24px;
-  border-radius: 30px;
-  background: #b8b8b8;
-  box-shadow: inset 0 4px 0 0 rgba(255, 255, 255, 0.48);
-  flex-shrink: 0;
-  z-index: 1;
-}
-
-.video-card {
-  position: relative;
-  width: 100%;
-  background: var(--card);
-  border: 8px solid var(--edge);
-  border-radius: 28px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  animation: swing 0.55s cubic-bezier(0.2, 0.9, 0.35, 1.1);
-  transform-origin: top center;
-}
-
-@keyframes swing {
-  0% {
-    opacity: 0;
-    transform: rotate(-3deg);
-  }
-  60% {
-    transform: rotate(1.4deg);
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* ---------- video card ---------- */
 
 .video-thumb {
   position: relative;
-  display: block;
   width: 100%;
   height: 233px;
   border-radius: 12px;
-  overflow: hidden;
   background: #fff;
-  transition: transform 0.18s var(--ease-out);
+  overflow: hidden;
 }
 
-.video-thumb:active {
-  transform: scale(0.985);
-}
-
-.video-thumb:active .video-play {
-  transform: translate(-50%, -50%) scale(0.94);
-}
-
-/* direct child only — this was also stretching the play icon to fill */
+/* The frame crops the still to the card: 414 wide, hung 35px off the left */
 .video-thumb > img {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: -35px;
+  top: 0;
+  width: 414px;
+  height: 233px;
+  max-width: none;
   object-fit: cover;
 }
 
@@ -956,132 +906,104 @@ button {
   transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
-  border-radius: 24px;
-  background: rgba(0, 0, 0, 0.56);
-  border: 1px solid var(--alpha16);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.24);
 }
 
-.video-card p {
+.video-caption {
   margin: 0;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   line-height: 1.4;
-  text-align: center;
-  color: var(--muted);
 }
 
-/* quiz */
+/* ---------- quiz ---------- */
 
 .quiz {
-  flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  animation: slide-in var(--dur-enter) var(--ease-out) both;
 }
 
 .quiz h1 {
   margin: 0;
-  font-size: 26px;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1.4;
-  text-align: center;
-}
-
-.quiz h1 em {
-  font-style: normal;
-  color: var(--green);
 }
 
 .quiz-options {
-  flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  overflow-y: auto;
-  scrollbar-width: none;
-  padding-bottom: 8px;
+  gap: 20px;
 }
 
-.quiz-options::-webkit-scrollbar {
-  display: none;
-}
-
+/* min-height rather than the frame's fixed 56, so a two-line option grows
+   instead of spilling out of its own card. */
 .quiz-option {
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 16px;
+  min-height: 56px;
+  padding: 12px;
+  border: 1px solid #e6e3e6;
   border-radius: 16px;
-  background: var(--card);
-  border: 2px solid var(--edge);
+  background: #fffdfe;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
-  text-align: center;
-  color: var(--muted);
+  color: #000;
+  text-align: left;
   transition:
-    background 0.16s ease,
-    border-color 0.16s ease,
-    color 0.16s ease,
-    transform 0.12s ease;
-}
-
-.quiz-option:not(:disabled):active {
-  transform: scale(0.985);
+    border-color 0.16s var(--ease-out),
+    background 0.16s var(--ease-out);
 }
 
 .quiz-option.is-picked {
-  border-color: var(--green);
-  color: #fff;
+  border-color: #3c3f45;
 }
 
 .quiz-option.is-correct {
-  background: var(--correct-bg);
-  border-color: var(--correct-edge);
-  color: #fff;
+  background: #f0f9f6;
+  border-color: #3da57b;
 }
 
 .quiz-option.is-wrong {
-  background: var(--wrong-bg);
-  border-color: var(--wrong-edge);
-  color: #fff;
+  background: #ffebeb;
+  border-color: #cc0000;
 }
 
+/* Not in the frames, but a wrong answer that explains itself is the whole
+   reason there are no lives — it keeps the tint of the state it belongs to. */
 .quiz-why {
-  flex-shrink: 0;
-  margin-bottom: 8px;
+  padding: 12px;
   border-radius: 16px;
-  padding: 14px 16px;
   font-size: 15px;
   font-weight: 600;
   line-height: 1.45;
-  animation: rise 0.24s ease;
+  animation: rise 0.22s var(--ease-out) both;
 }
 
 .quiz-why.ok {
-  background: rgba(34, 197, 94, 0.14);
-  border: 1px solid rgba(34, 197, 94, 0.5);
-  color: #e8f6cd;
+  background: #f0f9f6;
+  color: #1f6b4d;
 }
 
 .quiz-why.no {
-  background: rgba(178, 1, 1, 0.2);
-  border: 1px solid rgba(178, 1, 1, 0.65);
-  color: #ffd9d9;
+  background: #ffebeb;
+  color: #a30000;
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.lesson-footer {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  padding: 24px 20px;
 }
 
 /* ---------- success sheet ---------- */
@@ -1569,48 +1491,17 @@ button {
    Sansation for the headlines — straight off the Figma section. */
 
 .onb {
-  position: absolute;
-  inset: 0;
   z-index: 3;
-  display: flex;
-  flex-direction: column;
-  background: #fffcfe;
-  color: #000;
-  overflow: hidden;
-}
-
-/* 11.35px pitch, 1.35px dots; the frame's grid lands 2.48px off the left. */
-.onb-dots {
-  position: absolute;
-  inset: 0;
-  background-image: url('/assets/onb-dots.svg');
-  background-size: 11.35px 11.35px;
-  background-position: 2.48px 0;
-  pointer-events: none;
-}
-
-/* The status icons are solid-white art, so one filter flips the whole set
-   to ink — cellular, wifi and the inline-styled battery alike. */
-.onb .statusbar {
-  background: none;
-  color: #000;
-}
-
-.onb .statusbar-icons {
-  filter: invert(1);
 }
 
 /* Figma floats the home indicator over the content rather than reserving
    a row for it, so the CTA can sit its full 24px off the bottom. */
-.onb .homebar {
+.onb .homebar,
+.lesson .homebar {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-}
-
-.onb .homebar span {
-  background: #000;
 }
 
 .onb-splash {
@@ -1710,25 +1601,10 @@ button {
   }
 }
 
-/* The light screen's counterpart to .btn-primary: a flat dark pill. */
 /* 338 in a 335 column — the frame lets the pill sit 1.5px proud either side */
 .onb-next {
   width: 338px;
   max-width: calc(100% + 3px);
-  height: 56px;
-  flex-shrink: 0;
-  border-radius: 42px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  background: #292929;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.4;
-  transition: transform 140ms var(--ease-out);
-}
-
-.onb-next:active {
-  transform: scale(0.97);
 }
 
 @media (max-width: 767px) {

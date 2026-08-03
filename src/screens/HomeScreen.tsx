@@ -61,8 +61,8 @@ export default function HomeScreen({
   const finished = completed >= levels.length
 
   return (
-    <div className="home">
-      <div className="home-dots" />
+    <div className="light-screen home">
+      <div className="dot-grid" />
       <StatusBar />
 
       <div className="home-head">

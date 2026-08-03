@@ -121,6 +121,8 @@ export default function App() {
             <>
               <LevelScreen
                 levelId={view.levelId}
+                streak={state.streak}
+                xp={state.xp}
                 onExit={() => go({ name: 'home' })}
                 onComplete={completeLevel}
               />

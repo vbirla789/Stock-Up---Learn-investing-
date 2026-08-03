@@ -67,8 +67,8 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
   const slide = SLIDES[step]
 
   return (
-    <div className="onb">
-      <div className="onb-dots" />
+    <div className="light-screen onb">
+      <div className="dot-grid" />
       <StatusBar />
 
       {step === SPLASH ? (
@@ -102,7 +102,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
           />
 
           <button
-            className="onb-next"
+            className="btn-pill onb-next"
             onClick={() =>
               step === SLIDES.length - 1 ? onDone() : setStep(step + 1)
             }
