@@ -1396,15 +1396,16 @@ button {
   gap: 4px;
 }
 
-/* Figma still has the old lime here, so this one stays off the token */
-.lb-you {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  line-height: 18px;
-  color: #9ed62e;
+/* your own row reads in the accent so it's findable in a long list */
+.lb-row-label.is-you {
+  color: var(--green);
+  font-weight: 600;
 }
+
+.lb-row-points {
+  font-weight: 600;
+}
+
 
 .toast {
   position: absolute;

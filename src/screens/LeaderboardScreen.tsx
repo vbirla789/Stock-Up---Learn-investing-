@@ -149,22 +149,10 @@ export default function LeaderboardScreen({
                 >
                   <img src={badge[row.tier]} alt="" />
                   <div className="lb-row-body">
-                    <span className="lb-row-label">
+                    <span className={row.isYou ? 'lb-row-label is-you' : 'lb-row-label'}>
                       {row.rank}. {row.isYou ? 'You' : row.name}
-                      {row.isYou && (
-                        <span className="lb-you">
-                          <img
-                            src="/assets/icon-diamond.svg"
-                            alt=""
-                            width={4}
-                            height={4}
-                            style={{ transform: 'rotate(-45deg)' }}
-                          />
-                          YOU
-                        </span>
-                      )}
                     </span>
-                    <span>{row.points}</span>
+                    <span className="lb-row-points">{row.points}</span>
                   </div>
                 </div>
               ))}
