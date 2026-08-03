@@ -458,6 +458,8 @@ button {
 /* The path screen shares the onboarding's light stock. Pills and the nudge are
    pinned; only the climb scrolls, so the movement itself reads as the path. */
 
+/* The 24 gap under the nudge is split: 16 belongs to the pinned block so the
+   scroller's clip line sits clear of the card, 8 rides with the path. */
 .home-head {
   position: relative;
   z-index: 2;
@@ -465,7 +467,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 16px 20px 0;
+  padding: 16px 20px;
 }
 
 .home-head-row {
@@ -531,17 +533,21 @@ button {
 
 /* ---------- the climb ---------- */
 
-/* 36 = the column's 20 plus the path's own 16 inset */
+/* 36 = the column's 20 plus the path's own 16 inset. The top of the scroller
+   fades out so stones dissolve before the nudge rather than reading as if
+   they were sliding around inside it. */
 .home-scroll {
   position: relative;
   z-index: 2;
   flex: 1;
   min-height: 0;
-  padding: 24px 36px 48px;
+  padding: 8px 36px 48px;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 34px);
+  mask-image: linear-gradient(180deg, transparent 0, #000 34px);
 }
 
 .home-scroll::-webkit-scrollbar {
