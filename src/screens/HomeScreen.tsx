@@ -29,6 +29,46 @@ function stateFor(id: number, completed: number): LevelState {
   return 'locked'
 }
 
+/**
+ * The nudge has to be true in every state, so it is written as a full set
+ * rather than one template with numbers dropped in. Green line reports where
+ * you stand; black line is the reason to open a level right now.
+ *
+ * Order matters: an unbroken streak is the only time-sensitive claim on the
+ * screen, so it outranks progress once you are underway.
+ */
+function nudgeFor(state: HomeState, total: number) {
+  const { completed, streak, doneToday } = state
+
+  if (completed === 0) {
+    return { lead: 'Level 1 is open', sub: 'Start at the bottom of the path' }
+  }
+
+  if (completed >= total) {
+    return {
+      lead: `All ${total} levels done!`,
+      sub: 'You’re ready to start your SIP',
+    }
+  }
+
+  if (!doneToday) {
+    return {
+      lead: `Level ${completed} done!`,
+      sub:
+        streak > 0
+          ? `One level today keeps your ${streak}-day streak`
+          : 'One level today starts a streak',
+    }
+  }
+
+  // The last level *is* the SIP, so "1 more to unlock it" would be a lie.
+  const left = total - completed
+  return {
+    lead: `Level ${completed} done!`,
+    sub: left === 1 ? 'Your SIP level is next' : `${left} levels to your SIP`,
+  }
+}
+
 export default function HomeScreen({
   state,
   onOpenLevel,
@@ -58,7 +98,7 @@ export default function HomeScreen({
     toastTimer.current = window.setTimeout(() => setToast(null), 1800)
   }
 
-  const finished = completed >= levels.length
+  const nudge = nudgeFor(state, levels.length)
 
   return (
     <div className="light-screen home">
@@ -117,16 +157,8 @@ export default function HomeScreen({
         </div>
 
         <div className="nudge">
-          <p className="nudge-lead">
-            {finished
-              ? `All ${levels.length} levels done!`
-              : `Level ${completed + 1} reached!`}
-          </p>
-          <p className="nudge-sub">
-            {finished
-              ? 'Start your SIP at the top'
-              : `Complete to maintain your ${streak}-day streak`}
-          </p>
+          <p className="nudge-lead">{nudge.lead}</p>
+          <p className="nudge-sub">{nudge.sub}</p>
         </div>
       </div>
 
