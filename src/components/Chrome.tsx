@@ -64,17 +64,6 @@ export function HomeBar() {
   )
 }
 
-// Same backdrop as home — a tall glow behind the faint grid — but with the
-// glow centred at the top of the screen rather than the middle.
-export function ScreenBg() {
-  return (
-    <div className="bg bg-screen">
-      <div className="bg-glow" />
-      <div className="bg-grid" />
-    </div>
-  )
-}
-
 interface PrimaryButtonProps {
   children: ReactNode
   onClick: () => void

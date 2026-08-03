@@ -180,43 +180,12 @@ button {
     padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
   }
   .screen .lb-content {
-    padding-top: calc(88px + env(safe-area-inset-top, 0px));
+    padding-top: calc(80px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
   }
 }
 
 /* ---------- shared chrome ---------- */
-
-.bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.bg-glow {
-  position: absolute;
-  inset: 0;
-}
-
-/* Lesson, quiz and success share the grid, with the glow pinned to the top. */
-.bg-screen .bg-glow {
-  background: radial-gradient(
-    85.6% 64.4% at 50% 0.8%,
-    #061037 0%,
-    #040a25 50%,
-    #020512 100%
-  );
-}
-
-/* One 53.5px cell tiled — rounded corners, so the grid breaks at each
-   junction the way the frame's does. Hairline gradients couldn't do that. */
-.bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image: url('/assets/bg-grid.svg');
-  background-size: 53.532px 53.532px;
-}
 
 .statusbar {
   position: relative;
@@ -707,7 +676,7 @@ button {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 32px;
   padding: 16px 20px 0;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -744,8 +713,8 @@ button {
 }
 
 .steps-done {
-  width: 56px;
-  flex-shrink: 0;
+  flex: 0 1 56px;
+  min-width: 0;
   background: #d6d6d6;
 }
 
@@ -1147,15 +1116,9 @@ button {
   display: none;
 }
 
-/* 20px column, back button row, then podium and list — matching the frame */
-/* clears the absolutely-positioned header: 44 status + 24 + 40 back row + 24 */
+/* clears the absolutely-positioned header: 44 status + 16 + 40 back row + 24 */
 .lb-content {
-  padding: 132px 20px 32px;
-}
-
-.lb-podium {
-  position: relative;
-  height: 268px;
+  padding: 124px 20px 32px;
 }
 
 .lb-header {
@@ -1166,14 +1129,15 @@ button {
   z-index: 20;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   padding-bottom: 12px;
-  transition: background 0.2s ease;
+  transition: background 0.2s var(--ease-out);
 }
 
 /* once the list slides under it, the header needs its own surface */
 .lb-header.is-stuck {
-  background: #020512;
+  background: #fffcfe;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.06);
 }
 
 .lb-title-row {
@@ -1189,12 +1153,19 @@ button {
   left: 0;
   right: 0;
   text-align: center;
+  font-family: 'Sansation', 'Nunito', sans-serif;
   font-size: 20px;
   font-weight: 700;
-  line-height: 36px;
-  color: #e6e6e6;
-  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+  line-height: 40px;
+  color: #000;
   pointer-events: none;
+}
+
+/* ---------- podium ---------- */
+
+.lb-podium {
+  position: relative;
+  height: 268px;
 }
 
 .podium-person {
@@ -1222,31 +1193,34 @@ button {
   line-height: 16px;
   letter-spacing: 0.32px;
   text-align: center;
+  color: #000;
 }
 
 /* scoped past `.podium-person span`, which would otherwise force it bold */
 .podium-person .podium-points {
-  height: 20.4px;
+  height: 22px;
   padding: 0 8px;
-  border-radius: 24px;
-  background: var(--alpha16);
-  border: 1px solid var(--alpha16);
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e6e3e6;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .podium-block {
   position: absolute;
   overflow: hidden;
   z-index: 2;
+  background: #3da57b;
 }
 
 .podium-block p {
   margin: 0;
   text-align: center;
+  font-family: 'Sansation', 'Nunito', sans-serif;
   font-size: 44px;
   font-weight: 700;
   line-height: 1;
@@ -1259,12 +1233,14 @@ button {
   z-index: 2;
 }
 
+/* ---------- the long list ---------- */
+
 .lb-list {
   margin-top: 24px;
-  border-radius: 16px;
-  border: 1px solid rgba(62, 77, 142, 0.7);
-  background: rgba(0, 87, 255, 0.05);
-  padding: 15px;
+  padding: 16px;
+  border: 1px solid #e6e3e6;
+  border-radius: 20px;
+  background: #fffdfe;
 }
 
 .lb-list-head {
@@ -1272,42 +1248,40 @@ button {
   align-items: center;
   justify-content: space-between;
   padding: 4px 0;
+  margin-bottom: 16px;
   font-size: 16px;
   font-weight: 700;
-  line-height: 22px;
-  margin-bottom: 16px;
+  line-height: 1.4;
+  color: #000;
 }
 
 .lb-rows {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .lb-row {
-  height: 56px;
+  min-height: 56px;
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 0 18px 0 12px;
-  border-radius: 10px;
-  background: linear-gradient(
-    90deg,
-    rgba(11, 9, 172, 0.32) 22.27%,
-    rgba(8, 20, 69, 0.32) 97%
-  );
+  gap: 12px;
+  padding: 0 16px 0 12px;
+  border: 1px solid #e6e3e6;
+  border-radius: 16px;
+  background: #fffdfe;
 }
 
+/* the three on the podium carry the same tint as a right answer */
 .lb-row.gold {
-  background: linear-gradient(
-    90deg,
-    rgba(34, 197, 94, 0.27) 22.27%,
-    rgba(5, 41, 21, 0.27) 98.57%
-  );
+  background: #f0f9f6;
+  border-color: #3da57b;
 }
 
+/* your own row keeps the hard 2px lip the nudge and the cards use */
 .lb-row.me {
-  outline: 1px solid rgba(34, 197, 94, 0.45);
+  border-color: #3da57b;
+  box-shadow: 0 2px 0 0 #3da57b;
 }
 
 /* direct child only — the YOU diamond nested deeper keeps its own size */
@@ -1322,10 +1296,11 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  letter-spacing: -0.1px;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #000;
 }
 
 .lb-row-label {
@@ -1336,12 +1311,12 @@ button {
 
 /* your own row reads in the accent so it's findable in a long list */
 .lb-row-label.is-you {
-  color: var(--green);
-  font-weight: 600;
+  color: #3da57b;
+  font-weight: 700;
 }
 
 .lb-row-points {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 
@@ -1353,8 +1328,8 @@ button {
   z-index: 30;
   padding: 10px 16px;
   border-radius: 999px;
-  background: rgba(16, 20, 35, 0.96);
-  border: 1px solid rgba(62, 77, 142, 0.9);
+  background: rgba(41, 41, 41, 0.96);
+  color: #fff;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;

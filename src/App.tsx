@@ -9,7 +9,6 @@ import { rankFor } from './data/leaderboard'
 import type { Progress, View } from './types'
 
 const KEY = 'nocap-progress-v1'
-const ONBOARDED = 'nocap-onboarded-v1'
 
 // Starting state matches the Figma home screen exactly: a 5-day streak,
 // 100 XP already banked and rank 28 — with level 1 as the only one open.
@@ -36,21 +35,11 @@ export default function App() {
   // Completion is a sheet over the lesson, so the level screen stays mounted
   // behind it rather than being swapped out for a success screen.
   const [sheetLevel, setSheetLevel] = useState<number | null>(null)
-  // Onboarding runs once, on the first load of the site. `runId` bumps on
+  // This is a walkthrough, not a product install: onboarding plays on every
+  // load so the pitch is always the first thing anyone sees. `runId` bumps on
   // reset so replaying it remounts the screen and the animation starts over.
-  const [onboarding, setOnboarding] = useState(
-    () => !localStorage.getItem(ONBOARDED),
-  )
+  const [onboarding, setOnboarding] = useState(true)
   const [runId, setRunId] = useState(0)
-
-  function finishOnboarding() {
-    try {
-      localStorage.setItem(ONBOARDED, '1')
-    } catch {
-      /* private mode — it'll just show again next visit */
-    }
-    setOnboarding(false)
-  }
 
   useEffect(() => {
     try {
@@ -80,11 +69,6 @@ export default function App() {
 
   function reset() {
     setState(initial)
-    try {
-      localStorage.removeItem(ONBOARDED)
-    } catch {
-      /* ignore */
-    }
     setOnboarding(true)
     setRunId((n) => n + 1)
     go({ name: 'home' })
@@ -107,7 +91,7 @@ export default function App() {
               : view.name + ('levelId' in view ? view.levelId : '')
           }
         >
-          {onboarding && <OnboardingScreen onDone={finishOnboarding} />}
+          {onboarding && <OnboardingScreen onDone={() => setOnboarding(false)} />}
 
           {!onboarding && view.name === 'home' && (
             <HomeScreen

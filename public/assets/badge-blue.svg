@@ -1,10 +1,10 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Badge">
-<path id="Polygon 3" d="M12 0.5L22.3923 6.5V18.5L12 24.5L1.6077 18.5V6.5L12 0.5Z" fill="url(#paint0_linear_0_9)" stroke="#216DAB" stroke-linejoin="round"/>
+<path id="Polygon 3" d="M12 0.5L22.3923 6.5V18.5L12 24.5L1.6077 18.5V6.5L12 0.5Z" fill="url(#paint0_linear_0_9)" stroke="#E6E3E6" stroke-linejoin="round"/>
 <g id="Star 1" opacity="0.7" filter="url(#filter0_f_0_9)">
-<path d="M12 7.50007L13.4695 10.4775L16.7553 10.955L14.3776 13.2726L14.9389 16.5452L12 15.0001L9.06107 16.5452L9.62236 13.2726L7.24472 10.955L10.5305 10.4775L12 7.50007Z" fill="#216DAB"/>
+<path d="M12 7.50007L13.4695 10.4775L16.7553 10.955L14.3776 13.2726L14.9389 16.5452L12 15.0001L9.06107 16.5452L9.62236 13.2726L7.24472 10.955L10.5305 10.4775L12 7.50007Z" fill="#E6E3E6"/>
 </g>
-<path id="Star 2" d="M12 7.50007L13.4695 10.4775L16.7553 10.955L14.3776 13.2726L14.9389 16.5452L12 15.0001L9.06107 16.5452L9.62236 13.2726L7.24472 10.955L10.5305 10.4775L12 7.50007Z" fill="#F5FBEA"/>
+<path id="Star 2" d="M12 7.50007L13.4695 10.4775L16.7553 10.955L14.3776 13.2726L14.9389 16.5452L12 15.0001L9.06107 16.5452L9.62236 13.2726L7.24472 10.955L10.5305 10.4775L12 7.50007Z" fill="#7A7A7A"/>
 </g>
 <defs>
 <filter id="filter0_f_0_9" x="0.244718" y="0.50007" width="23.5106" height="23.0451" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -13,8 +13,8 @@
 <feGaussianBlur stdDeviation="3.5" result="effect1_foregroundBlur_0_9"/>
 </filter>
 <linearGradient id="paint0_linear_0_9" x1="12" y1="0.5" x2="12" y2="43.6055" gradientUnits="userSpaceOnUse">
-<stop stop-color="#1B5A8D"/>
-<stop offset="1" stop-color="#040A23"/>
+<stop stop-color="#D6D6D6"/>
+<stop offset="1" stop-color="#B7B4B8"/>
 </linearGradient>
 </defs>
 </svg>

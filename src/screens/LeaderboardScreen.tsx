@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StatusBar, HomeBar, BackButton, ScreenBg } from '../components/Chrome'
+import { StatusBar, HomeBar } from '../components/Chrome'
 import { boardFor } from '../data/leaderboard'
 import type { Tier } from '../types'
 
@@ -15,41 +15,12 @@ const badge: Record<Tier, string> = {
 }
 
 // Podium geometry, all relative to the 335 x 268 podium frame. The blocks
-// bottom out at exactly 268, so the frame is filled edge to edge.
+// bottom out at exactly 268, so the frame is filled edge to edge. Every block
+// is the same green — height is what ranks them, the way a real podium does.
 const blocks = [
-  {
-    place: 2,
-    left: 4,
-    top: 168,
-    h: 100,
-    capTop: 151,
-    capH: 17,
-    cap: '/assets/podium-top-2.svg',
-    fill: 'rgba(34, 197, 94, 0.8)',
-    numTop: 16,
-  },
-  {
-    place: 1,
-    left: 116,
-    top: 134,
-    h: 134,
-    capTop: 114,
-    capH: 20,
-    cap: '/assets/podium-top-1.svg',
-    fill: '#22c55e',
-    numTop: 23,
-  },
-  {
-    place: 3,
-    left: 228,
-    top: 184,
-    h: 84,
-    capTop: 170,
-    capH: 14,
-    cap: '/assets/podium-top-3.svg',
-    fill: 'rgba(34, 197, 94, 0.93)',
-    numTop: 14,
-  },
+  { place: 2, left: 4, top: 168, h: 100, capTop: 151, capH: 17, cap: '/assets/podium-top-2.svg', numTop: 16 },
+  { place: 1, left: 116, top: 134, h: 134, capTop: 114, capH: 20, cap: '/assets/podium-top-1.svg', numTop: 23 },
+  { place: 3, left: 228, top: 184, h: 84, capTop: 170, capH: 14, cap: '/assets/podium-top-3.svg', numTop: 14 },
 ]
 
 // podium[] arrives as [rank 2, rank 1, rank 3] — left, centre, right.
@@ -74,14 +45,22 @@ export default function LeaderboardScreen({
   const [stuck, setStuck] = useState(false)
 
   return (
-    <>
-      <ScreenBg />
+    <div className="light-screen lb-screen">
+      <div className="dot-grid" />
 
       {/* Sits above the scroll layer so the list can never cover the back button */}
       <div className={`lb-header ${stuck ? 'is-stuck' : ''}`}>
         <StatusBar />
         <div className="lb-title-row">
-          <BackButton onClick={onBack} />
+          <button className="icon-btn-light" onClick={onBack} aria-label="Back">
+            <img
+              src="/assets/lesson/icon-back.svg"
+              alt=""
+              width={11.25}
+              height={6.25}
+              style={{ transform: 'rotate(-90deg)' }}
+            />
+          </button>
           <span className="lb-title">Leaderboard</span>
         </div>
       </div>
@@ -102,13 +81,7 @@ export default function LeaderboardScreen({
                 />
                 <div
                   className="podium-block"
-                  style={{
-                    left: b.left,
-                    top: b.top,
-                    width: 112,
-                    height: b.h,
-                    background: b.fill,
-                  }}
+                  style={{ left: b.left, top: b.top, width: 112, height: b.h }}
                 >
                   <p style={{ marginTop: b.numTop }}>{b.place}</p>
                 </div>
@@ -151,7 +124,11 @@ export default function LeaderboardScreen({
                 >
                   <img src={badge[row.tier]} alt="" />
                   <div className="lb-row-body">
-                    <span className={row.isYou ? 'lb-row-label is-you' : 'lb-row-label'}>
+                    <span
+                      className={
+                        row.isYou ? 'lb-row-label is-you' : 'lb-row-label'
+                      }
+                    >
                       {row.rank}. {row.isYou ? 'You' : row.name}
                     </span>
                     <span className="lb-row-points">{row.points}</span>
@@ -164,6 +141,6 @@ export default function LeaderboardScreen({
       </div>
 
       <HomeBar />
-    </>
+    </div>
   )
 }

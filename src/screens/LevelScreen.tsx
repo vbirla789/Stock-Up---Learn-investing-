@@ -38,11 +38,10 @@ export default function LevelScreen({
   const quiz = step.type === 'quiz' ? step : null
   const correct = quiz !== null && picked === quiz.answer
 
+  // Back leaves the level rather than rewinding a step — you never want to
+  // re-answer a question you have already cleared to get out.
   function back() {
-    if (index === 0) return onExit()
-    setIndex(index - 1)
-    setPicked(null)
-    setChecked(false)
+    onExit()
   }
 
   function advance() {
