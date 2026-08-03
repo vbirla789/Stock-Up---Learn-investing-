@@ -65,6 +65,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
   }, [step])
 
   const slide = SLIDES[step]
+  // The last card hands over to the app; every other one advances the deck.
   const last = step === SLIDES.length - 1
 
   return (
@@ -106,7 +107,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
             className="btn-pill onb-next"
             onClick={() => (last ? onDone() : setStep(step + 1))}
           >
-            {last ? 'Explore Level 1' : 'Next'}
+            Next
           </button>
         </div>
       )}
