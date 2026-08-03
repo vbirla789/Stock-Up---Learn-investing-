@@ -1533,3 +1533,154 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- onboarding ---------- */
+
+.onb {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 34px 20px 0;
+  overflow: hidden;
+}
+
+.onb-title {
+  margin: 0 0 34px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  color: #e6e6e6;
+  animation: slide-up 320ms var(--ease-out) both;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* bars sit on a shared baseline and grow up from it */
+.onb-chart {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 31px;
+}
+
+.onb-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.onb-amount {
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  color: #e6e6e6;
+  font-variant-numeric: tabular-nums;
+  animation: fade 400ms var(--ease-out) both;
+}
+
+/* CSS keyframes rather than a JS-triggered transition, so growth doesn't
+   depend on requestAnimationFrame firing on mount */
+.onb-bar {
+  width: 100%;
+  height: var(--bar-h);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation-name: bar-grow;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes bar-grow {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--bar-h);
+  }
+}
+
+.onb-bar span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  animation: fade 500ms var(--ease-out) both;
+  animation-delay: 700ms;
+}
+
+/* the lighter band is the top face of the bar, so it stays pinned up there */
+.onb-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 18px;
+}
+
+.onb-bar.is-spent {
+  background: #62bd87;
+}
+
+.onb-bar.is-spent::before {
+  background: #6bc18e;
+}
+
+.onb-bar.is-invested {
+  background: #22c55e;
+}
+
+.onb-bar.is-invested::before {
+  background: #6fd996;
+  height: 20px;
+}
+
+.onb-captions {
+  display: flex;
+  gap: 31px;
+  margin-top: 18px;
+}
+
+.onb-captions p {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  color: #cfd4e4;
+  animation: fade 400ms var(--ease-out) both;
+}
+
+.onb-footer {
+  animation: fade 400ms var(--ease-out) both;
+  animation-delay: 1000ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onb-bar {
+    animation: none !important;
+    height: var(--bar-h) !important;
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import HomeScreen from './screens/HomeScreen'
+import OnboardingScreen from './screens/OnboardingScreen'
 import LevelScreen from './screens/LevelScreen'
 import SuccessSheet from './screens/SuccessSheet'
 import LeaderboardScreen from './screens/LeaderboardScreen'
@@ -8,6 +9,7 @@ import { rankFor } from './data/leaderboard'
 import type { Progress, View } from './types'
 
 const KEY = 'nocap-progress-v1'
+const ONBOARDED = 'nocap-onboarded-v1'
 
 // Starting state matches the Figma home screen exactly: a 5-day streak,
 // 100 XP already banked and rank 28 — with level 1 as the only one open.
@@ -34,6 +36,21 @@ export default function App() {
   // Completion is a sheet over the lesson, so the level screen stays mounted
   // behind it rather than being swapped out for a success screen.
   const [sheetLevel, setSheetLevel] = useState<number | null>(null)
+  // Onboarding runs once, on the first load of the site. `runId` bumps on
+  // reset so replaying it remounts the screen and the animation starts over.
+  const [onboarding, setOnboarding] = useState(
+    () => !localStorage.getItem(ONBOARDED),
+  )
+  const [runId, setRunId] = useState(0)
+
+  function finishOnboarding() {
+    try {
+      localStorage.setItem(ONBOARDED, '1')
+    } catch {
+      /* private mode — it'll just show again next visit */
+    }
+    setOnboarding(false)
+  }
 
   useEffect(() => {
     try {
@@ -63,6 +80,13 @@ export default function App() {
 
   function reset() {
     setState(initial)
+    try {
+      localStorage.removeItem(ONBOARDED)
+    } catch {
+      /* ignore */
+    }
+    setOnboarding(true)
+    setRunId((n) => n + 1)
     go({ name: 'home' })
   }
 
@@ -77,9 +101,15 @@ export default function App() {
       <div className="device">
         <div
           className="screen"
-          key={view.name + ('levelId' in view ? view.levelId : '')}
+          key={
+            onboarding
+              ? `onboarding-${runId}`
+              : view.name + ('levelId' in view ? view.levelId : '')
+          }
         >
-          {view.name === 'home' && (
+          {onboarding && <OnboardingScreen onDone={finishOnboarding} />}
+
+          {!onboarding && view.name === 'home' && (
             <HomeScreen
               state={{ ...state, rank: rankFor(state.xp) }}
               onOpenLevel={(id) => setView({ name: 'level', levelId: id })}
@@ -87,7 +117,7 @@ export default function App() {
             />
           )}
 
-          {view.name === 'level' && (
+          {!onboarding && view.name === 'level' && (
             <>
               <LevelScreen
                 levelId={view.levelId}
@@ -105,7 +135,7 @@ export default function App() {
             </>
           )}
 
-          {view.name === 'leaderboard' && (
+          {!onboarding && view.name === 'leaderboard' && (
             <LeaderboardScreen onBack={() => go({ name: 'home' })} xp={state.xp} />
           )}
         </div>
