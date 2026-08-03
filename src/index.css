@@ -305,15 +305,21 @@ button {
 }
 
 .btn-secondary {
-  min-height: 48px;
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border-radius: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--alpha16);
   font-size: 18px;
   font-weight: 700;
   color: #fff;
+  transition: background 0.16s var(--ease-out);
+}
+
+.btn-secondary:active {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* Counters keep a fixed digit width so pills don't jump as numbers change */
@@ -1175,7 +1181,7 @@ button {
   margin-top: 48px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .sheet-home-indicator {
@@ -1575,7 +1581,7 @@ button {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: 34px 20px 0;
+  padding: 34px 28px 0;
   overflow: hidden;
 }
 
@@ -1606,7 +1612,7 @@ button {
   min-height: 0;
   display: flex;
   align-items: flex-end;
-  gap: 48px;
+  gap: 41px;
 }
 
 .onb-col {
@@ -1693,7 +1699,7 @@ button {
 
 .onb-captions {
   display: flex;
-  gap: 48px;
+  gap: 41px;
   margin-top: 18px;
 }
 

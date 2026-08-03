@@ -5,7 +5,6 @@ import { XP_PER_LEVEL } from '../data/levels'
 interface SuccessSheetProps {
   levelId: number
   onClose: () => void
-  onLeaderboard: () => void
   onShare: () => void
 }
 
@@ -15,7 +14,6 @@ interface SuccessSheetProps {
 export default function SuccessSheet({
   levelId,
   onClose,
-  onLeaderboard,
   onShare,
 }: SuccessSheetProps) {
   return (
@@ -61,9 +59,7 @@ export default function SuccessSheet({
           </div>
 
           <div className="sheet-actions">
-            <PrimaryButton onClick={onLeaderboard}>
-              View leaderboard
-            </PrimaryButton>
+            <PrimaryButton onClick={onClose}>Next</PrimaryButton>
             <button className="btn-secondary" onClick={onShare}>
               Share
               <span className="pill-icon" style={{ width: 20, height: 20 }}>
