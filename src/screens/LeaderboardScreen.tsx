@@ -52,11 +52,12 @@ const blocks = [
   },
 ]
 
-// podium[] arrives as [rank 2, rank 1, rank 3] — left, centre, right
+// podium[] arrives as [rank 2, rank 1, rank 3] — left, centre, right.
+// The avatar art is transparent, so each sits on its own pastel disc.
 const seats = [
-  { place: 2, left: 24, top: 42 },
-  { place: 1, left: 137, top: 6 },
-  { place: 3, left: 248, top: 62 },
+  { place: 2, left: 24, top: 42, avatarBg: '#ffc0c5' },
+  { place: 1, left: 137, top: 6, avatarBg: '#e1e4ea' },
+  { place: 3, left: 248, top: 62, avatarBg: '#ffecc0' },
 ]
 
 const fallbackAvatars = [
@@ -126,6 +127,7 @@ export default function LeaderboardScreen({
                     className="avatar"
                     src={person.avatar || fallbackAvatars[i]}
                     alt=""
+                    style={{ background: seat.avatarBg }}
                   />
                   <span>{person.name}</span>
                   <span className="podium-points">{person.points}</span>
