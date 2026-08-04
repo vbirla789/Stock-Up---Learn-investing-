@@ -1829,8 +1829,20 @@ html[data-nav='up'] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   text-align: center;
+  /* arrives behind the wordmark leaving, so the two never move at once */
+  animation: rise 420ms var(--ease-out) 160ms backwards;
+}
+
+/* 12 inside the pair, 16 between the pair and the copy — the mark belongs to
+   its label, not to the headline. */
+.onb-intro-mark {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .onb-mark {

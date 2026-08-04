@@ -134,14 +134,18 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
             <div className="onb-deck" ref={deck} onScroll={onScroll}>
               <section className="onb-slide">
                 <div className="onb-intro">
-                  <img
-                    className="onb-mark"
-                    src="/assets/onb/icon-graph.svg"
-                    alt=""
-                    width={36}
-                    height={36}
-                  />
-                  <p className="onb-eyebrow">BEFORE YOU START</p>
+                  {/* the mark and its label are one unit, tighter than the
+                      gap that separates them from the copy */}
+                  <div className="onb-intro-mark">
+                    <img
+                      className="onb-mark"
+                      src="/assets/onb/icon-graph.svg"
+                      alt=""
+                      width={36}
+                      height={36}
+                    />
+                    <p className="onb-eyebrow">BEFORE YOU START</p>
+                  </div>
                   <div className="onb-intro-copy">
                     <h1>Investing is way simpler than it sounds.</h1>
                     <p>
