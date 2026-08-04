@@ -1,5 +1,14 @@
 /* Nunito carries the app (loaded in index.html); Sansation is self-hosted and
-   used only for the onboarding headlines, which the Figma sets in it. */
+   used for the display headlines, which the Figma sets in it. Both weights are
+   real files — the family has nothing between 400 and 700 to synthesise. */
+@font-face {
+  font-family: 'Sansation';
+  src: url('/fonts/Sansation-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Sansation';
   src: url('/fonts/Sansation-Bold.woff') format('woff');
@@ -75,7 +84,7 @@ button {
 .quiz-option,
 .path-node,
 .video-thumb,
-.onb-next {
+.onb-skip {
   transition: transform var(--dur-press) var(--ease-out);
 }
 
@@ -1188,7 +1197,7 @@ button {
   text-align: center;
   font-family: 'Sansation', 'Nunito', sans-serif;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 40px;
   color: #000;
   pointer-events: none;
@@ -1609,15 +1618,16 @@ html[data-nav='back'] {
 }
 
 /* ---------- onboarding ---------- */
-/* The only light screen in the app: white stock, a faint dot grid, and
-   Sansation for the headlines — straight off the Figma section. */
+/* A snap-scrolling deck rather than a button carousel: the intro, then four
+   cards, each one pulled up from the bottom. The next card always peeks, so
+   there is never a moment where the screen looks finished. */
 
 .onb {
   z-index: 3;
 }
 
 /* Figma floats the home indicator over the content rather than reserving
-   a row for it, so the CTA can sit its full 24px off the bottom. */
+   a row for it, so the deck can run the full height. */
 .onb .homebar,
 .lesson .homebar {
   position: absolute;
@@ -1655,26 +1665,22 @@ html[data-nav='back'] {
   }
 }
 
-.onb-body {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 40px 20px 24px;
-}
+/* ---------- the deck ---------- */
 
 .onb-head {
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
   display: flex;
-  flex-direction: column;
-  gap: 40px;
-  width: 100%;
+  align-items: center;
+  gap: 48px;
+  padding: 24px 20px 48px;
+  animation: fade 320ms var(--ease-out) backwards;
 }
 
 .onb-progress {
+  flex: 1;
+  min-width: 0;
   height: 6px;
   border-radius: 20px;
   background: #f0f0f0;
@@ -1689,48 +1695,182 @@ html[data-nav='back'] {
   transition: width 420ms var(--ease-out);
 }
 
-.onb-title {
+.onb-skip {
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #676b89;
+}
+
+.onb-skip:active {
+  transform: scale(0.94);
+}
+
+/* A slide stops one gap plus one peek short of the viewport, which is what
+   leaves the next card showing at the bottom. The trailing padding buys the
+   extra pull that ends onboarding. */
+.onb-deck {
+  --peek: 39px;
+  --slide-gap: 48px;
+
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--slide-gap);
+  padding: 0 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.onb-deck::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll room past the last card, and a snap point of its own — one more
+   flick from the last card lands here and ends onboarding. Relying on raw
+   overscroll would not survive mandatory snapping, which yanks the position
+   back before a scroll handler ever sees it. A padding on the deck would
+   shrink every slide instead, since percentage flex-basis resolves against
+   the content box. */
+.onb-tail {
+  flex: 0 0 120px;
+  scroll-snap-align: end;
+}
+
+.onb-slide {
+  flex: 0 0 calc(100% - var(--peek) - var(--slide-gap));
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.onb-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: center;
+}
+
+.onb-eyebrow {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #676b89;
+}
+
+.onb-intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.onb-intro-copy h1 {
   margin: 0;
   font-family: 'Sansation', 'Nunito', sans-serif;
-  font-weight: 700;
   font-size: 28px;
+  font-weight: 700;
   line-height: 1.4;
   color: #000;
-  animation: onb-rise 380ms var(--ease-out) backwards;
-  animation-delay: 60ms;
 }
 
-.onb-title .is-accent {
-  color: #3da57b;
+.onb-intro-copy p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #676b89;
 }
 
-.onb-art {
+/* ---------- card ---------- */
+
+.onb-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 20px;
+  border: 1px solid #e2e4ec;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+.onb-card img {
   width: 100%;
   min-height: 0;
   object-fit: contain;
-  animation: onb-rise 460ms var(--ease-out) backwards;
-  animation-delay: 140ms;
 }
 
-@keyframes onb-rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.onb-next {
+.onb-card h2 {
+  margin: 0;
   width: 100%;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #000;
+  text-align: left;
+}
+
+.onb-card .is-accent {
+  color: #3da57b;
+}
+
+/* ---------- the only thing saying "keep going" ---------- */
+
+.onb-chevrons {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5.75px;
+  pointer-events: none;
+}
+
+.onb-chevrons img {
+  display: block;
+  animation: chevron-bob 1.6s var(--ease-in-out) infinite;
+}
+
+/* The stagger is what reads as travel — three carets rising in sequence
+   rather than one block sliding up and down. */
+.onb-chevrons img:nth-child(1) { animation-delay: 0ms; }
+.onb-chevrons img:nth-child(2) { animation-delay: 110ms; }
+.onb-chevrons img:nth-child(3) { animation-delay: 220ms; }
+
+@keyframes chevron-bob {
+  0%,
+  55%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onb-chevrons img {
+    animation: none;
+    opacity: 0.6;
+  }
 }
 
 @media (max-width: 767px) {
-  /* Phones draw their own status bar, so the 24px rule applies from the top */
-  .screen .onb-body {
+  .screen .onb-head {
     padding-top: 24px;
-    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
 }

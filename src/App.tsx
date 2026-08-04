@@ -75,11 +75,12 @@ export default function App() {
     )
   }
 
-  // The last onboarding card hands straight over to the first lesson.
-  function startFirstLevel() {
+  // Onboarding hands over to the path, not to a lesson — the climb is the
+  // thing the four cards were arguing for, so it should be what you land on.
+  function finishOnboarding() {
     navigate(() => {
       setOnboarding(false)
-      setView({ name: 'level', levelId: 1 })
+      setView({ name: 'home' })
     })
   }
 
@@ -110,7 +111,7 @@ export default function App() {
               : view.name + ('levelId' in view ? view.levelId : '')
           }
         >
-          {onboarding && <OnboardingScreen onDone={startFirstLevel} />}
+          {onboarding && <OnboardingScreen onDone={finishOnboarding} />}
 
           {!onboarding && view.name === 'home' && (
             <HomeScreen

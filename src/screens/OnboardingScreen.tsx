@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { StatusBar, HomeBar } from '../components/Chrome'
 
 interface OnboardingScreenProps {
+  /** Both the SKIP button and the pull past the last card land on the path. */
   onDone: () => void
 }
 
@@ -9,7 +10,7 @@ interface Slide {
   /** Headline split into runs so the green phrases can be marked up inline. */
   parts: { text: string; accent?: boolean }[]
   art: string
-  /** The illustration's native ratio — each frame sizes its own art box. */
+  /** The illustration's native ratio — each card sizes its own art box. */
   ratio: string
 }
 
@@ -50,69 +51,128 @@ const SLIDES: Slide[] = [
   },
 ]
 
-/** The wordmark frame has no button, so it hands over on a timer. */
+/** The intro counts as a slide, so the progress bar has five stops. */
+const STOPS = SLIDES.length + 1
+
+/** The wordmark has no control, so it hands over on a timer. */
 const SPLASH_MS = 1500
 
-const SPLASH = -1
+/** Slack when testing against the two scroll extremes. */
+const EDGE = 8
 
 export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
-  const [step, setStep] = useState(SPLASH)
+  const [showDeck, setShowDeck] = useState(false)
+  const [index, setIndex] = useState(0)
+  const deck = useRef<HTMLDivElement>(null)
+  const left = useRef(false)
 
   useEffect(() => {
-    if (step !== SPLASH) return
-    const t = window.setTimeout(() => setStep(0), SPLASH_MS)
+    const t = window.setTimeout(() => setShowDeck(true), SPLASH_MS)
     return () => window.clearTimeout(t)
-  }, [step])
+  }, [])
 
-  const slide = SLIDES[step]
-  // The last card hands over to the app; every other one advances the deck.
-  const last = step === SLIDES.length - 1
+  // The snapped slide drives the progress bar. Pulling past the last card is
+  // what ends onboarding — the chevrons never stop inviting it, so the gesture
+  // that got you through the deck is the one that drops you on the path.
+  const onScroll = useCallback(() => {
+    const box = deck.current
+    if (!box || left.current) return
+
+    const slides = box.querySelectorAll<HTMLElement>('.onb-slide')
+    if (slides.length < 2) return
+
+    const pitch = slides[1].offsetTop - slides[0].offsetTop
+    const top = box.scrollTop
+    const lastCard = pitch * (STOPS - 1)
+    const end = box.scrollHeight - box.clientHeight
+
+    setIndex(Math.min(STOPS - 1, Math.max(0, Math.round(top / pitch))))
+
+    // The tail past the last card is its own snap point, so landing on it is
+    // a deliberate flick rather than a bounce.
+    if (top > lastCard + EDGE && top >= end - EDGE) {
+      left.current = true
+      onDone()
+    }
+  }, [onDone])
 
   return (
     <div className="light-screen onb">
       <div className="dot-grid" />
       <StatusBar />
 
-      {step === SPLASH ? (
+      {!showDeck ? (
         <div className="onb-splash">
           <h1>Stock up</h1>
         </div>
       ) : (
-        <div className="onb-body">
+        <>
           <div className="onb-head">
-            {/* The track stays mounted across steps so the fill can slide. */}
             <div className="onb-progress">
-              <span
-                style={{ width: `${((step + 1) / SLIDES.length) * 100}%` }}
-              />
+              <span style={{ width: `${((index + 1) / STOPS) * 100}%` }} />
             </div>
-            <h1 className="onb-title" key={`title-${step}`}>
-              {slide.parts.map((part, i) => (
-                <span key={i} className={part.accent ? 'is-accent' : undefined}>
-                  {part.text}
-                </span>
-              ))}
-            </h1>
+            <button className="onb-skip" onClick={onDone}>
+              SKIP
+            </button>
           </div>
 
-          <img
-            className="onb-art"
-            key={`art-${step}`}
-            src={slide.art}
-            alt=""
-            style={{ aspectRatio: slide.ratio }}
-          />
+          <div className="onb-deck" ref={deck} onScroll={onScroll}>
+            <section className="onb-slide">
+              <div className="onb-intro">
+                <p className="onb-eyebrow">FIRST, THE WHY</p>
+                <div className="onb-intro-copy">
+                  <h1>You don’t need money to start. You need time.</h1>
+                  <p>
+                    The bits nobody explains,
+                    <br />
+                    in thirty seconds. Swipe up.
+                  </p>
+                </div>
+              </div>
+              <Chevrons />
+            </section>
 
-          <button
-            className="btn-pill onb-next"
-            onClick={() => (last ? onDone() : setStep(step + 1))}
-          >
-            Next
-          </button>
-        </div>
+            {SLIDES.map((slide, i) => (
+              <section className="onb-slide" key={i}>
+                <div className="onb-card">
+                  <img
+                    src={slide.art}
+                    alt=""
+                    style={{ aspectRatio: slide.ratio }}
+                  />
+                  <h2>
+                    {slide.parts.map((part, k) => (
+                      <span
+                        key={k}
+                        className={part.accent ? 'is-accent' : undefined}
+                      >
+                        {part.text}
+                      </span>
+                    ))}
+                  </h2>
+                </div>
+                <Chevrons />
+              </section>
+            ))}
+
+            <div className="onb-tail" />
+          </div>
+        </>
       )}
 
       <HomeBar />
     </div>
+  )
+}
+
+// Three carets bobbing in sequence — the only thing telling you the deck
+// moves, since there is no button anywhere on it.
+function Chevrons() {
+  return (
+    <span className="onb-chevrons" aria-hidden="true">
+      <img src="/assets/lesson/icon-back.svg" alt="" width={11.25} height={6.25} />
+      <img src="/assets/lesson/icon-back.svg" alt="" width={11.25} height={6.25} />
+      <img src="/assets/lesson/icon-back.svg" alt="" width={11.25} height={6.25} />
+    </span>
   )
 }
