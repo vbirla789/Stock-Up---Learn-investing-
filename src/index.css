@@ -1,14 +1,5 @@
 /* Nunito carries the app (loaded in index.html); Sansation is self-hosted and
-   used for the display headlines, which the Figma sets in it. Both weights are
-   real files — the family has nothing between 400 and 700 to synthesise. */
-@font-face {
-  font-family: 'Sansation';
-  src: url('/fonts/Sansation-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
+   used for the display headlines, which the Figma sets in it. */
 @font-face {
   font-family: 'Sansation';
   src: url('/fonts/Sansation-Bold.woff') format('woff');
@@ -1150,6 +1141,7 @@ button {
   z-index: 2;
   flex: 1;
   min-height: 0;
+  overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -1197,7 +1189,7 @@ button {
   text-align: center;
   font-family: 'Sansation', 'Nunito', sans-serif;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 40px;
   color: #000;
   pointer-events: none;
@@ -1208,26 +1200,6 @@ button {
 .lb-podium {
   position: relative;
   height: 268px;
-}
-
-/* A soft wash behind the podium so the blocks sit in light rather than on a
-   flat sheet. Sits under everything — the blocks are z-index 2, people 3. */
-.lb-podium::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -48px;
-  width: 460px;
-  height: 340px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    closest-side,
-    rgba(61, 165, 123, 0.2) 0%,
-    rgba(61, 165, 123, 0.07) 55%,
-    rgba(61, 165, 123, 0) 100%
-  );
-  pointer-events: none;
 }
 
 .podium-person {
