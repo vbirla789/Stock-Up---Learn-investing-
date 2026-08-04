@@ -58,13 +58,15 @@ export default function SuccessSheet({
             View leaderboard
           </button>
           <button className="btn-ghost" onClick={onShare}>
+            <span className="pill-icon" style={{ width: 20, height: 20 }}>
+              <img
+                src="/assets/success/icon-upload.svg"
+                alt=""
+                width={14.01}
+                height={13.95}
+              />
+            </span>
             Share with friends
-            <img
-              src="/assets/success/icon-upload.svg"
-              alt=""
-              width={14.01}
-              height={13.95}
-            />
           </button>
         </div>
         </div>

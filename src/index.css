@@ -1095,6 +1095,11 @@ button {
   gap: 12px;
 }
 
+/* the sheet sets its labels a step down from the full-screen CTAs */
+.sheet-actions .btn-pill {
+  font-size: 16px;
+}
+
 /* Outlined counterpart to .btn-pill */
 .btn-ghost {
   height: 48px;
@@ -1107,7 +1112,7 @@ button {
   border-radius: 999px;
   background: #fff;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.06);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 28px;
   color: #292929;
@@ -1196,6 +1201,26 @@ button {
   height: 268px;
 }
 
+/* A soft wash behind the podium so the blocks sit in light rather than on a
+   flat sheet. Sits under everything — the blocks are z-index 2, people 3. */
+.lb-podium::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -48px;
+  width: 460px;
+  height: 340px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(61, 165, 123, 0.2) 0%,
+    rgba(61, 165, 123, 0.07) 55%,
+    rgba(61, 165, 123, 0) 100%
+  );
+  pointer-events: none;
+}
+
 .podium-person {
   position: absolute;
   width: 72.8px;
@@ -1238,11 +1263,14 @@ button {
   font-weight: 600;
 }
 
+/* Each block runs its own top-to-bottom ramp. They share a baseline, so the
+   deepest edge lines up across all three and the whole thing reads as lit
+   from above rather than three flat slabs. */
 .podium-block {
   position: absolute;
   overflow: hidden;
   z-index: 2;
-  background: #3da57b;
+  background: linear-gradient(180deg, #4cba8e 0%, #2f8f69 100%);
 }
 
 .podium-block p {
@@ -1268,7 +1296,7 @@ button {
   padding: 16px;
   border: 1px solid #e6e3e6;
   border-radius: 20px;
-  background: #fffdfe;
+  background: linear-gradient(180deg, #fffdfe 0%, #fafbfa 100%);
 }
 
 .lb-list-head {
@@ -1300,14 +1328,16 @@ button {
   background: #fffdfe;
 }
 
-/* the three on the podium carry the same tint as a right answer */
+/* The three on the podium carry the right-answer tint, but raked across the
+   row so it burns off toward the score instead of sitting as a flat block. */
 .lb-row.gold {
-  background: #f0f9f6;
+  background: linear-gradient(90deg, #e4f5ed 0%, #f3faf7 52%, #fffdfe 100%);
   border-color: #3da57b;
 }
 
 /* your own row keeps the hard 2px lip the nudge and the cards use */
 .lb-row.me {
+  background: linear-gradient(90deg, #eaf7f1 0%, #fffdfe 72%);
   border-color: #3da57b;
   box-shadow: 0 2px 0 0 #3da57b;
 }
