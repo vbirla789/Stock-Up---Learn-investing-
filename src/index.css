@@ -1650,15 +1650,41 @@ html[data-nav='up'] {
   bottom: 0;
 }
 
-.onb-splash {
+/* Holds the wordmark and the deck in the same box so they can overlap for the
+   length of the hand-off. */
+.onb-stage {
   position: relative;
   z-index: 2;
   flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Laid over the deck rather than beside it, and left transparent — both are
+   the same white ground with the same grid, so the wordmark can rise away
+   while the deck arrives underneath and it reads as one surface. */
+.onb-splash {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   padding-top: 266px;
+  pointer-events: none;
+}
+
+.onb-splash.is-leaving {
+  animation: onb-splash-out 340ms var(--ease-out) forwards;
+}
+
+@keyframes onb-splash-out {
+  to {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.97);
+  }
 }
 
 .onb-splash h1 {
@@ -1705,7 +1731,7 @@ html[data-nav='up'] {
   align-items: center;
   gap: 48px;
   padding: 24px 20px 48px;
-  animation: fade 320ms var(--ease-out) backwards;
+  animation: fade 320ms var(--ease-out) 120ms backwards;
 }
 
 .onb-progress {

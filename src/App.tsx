@@ -11,10 +11,13 @@ import type { Progress, View } from './types'
 
 const KEY = 'nocap-progress-v1'
 
-// Starting state matches the Figma home screen exactly: a 5-day streak,
-// 100 XP already banked and rank 28 — with level 1 as the only one open.
+// Level 1 always starts cleared, so anyone opening the app sees a done stone,
+// a current stone and the locked climb above — the three states at once rather
+// than an untouched path. The 100 XP is that one level's worth.
+const FLOOR = 1
+
 const initial: Progress = {
-  completed: 0,
+  completed: FLOOR,
   xp: 100,
   streak: 5,
   doneToday: false,
@@ -24,7 +27,9 @@ function load(): Progress {
   try {
     const raw = localStorage.getItem(KEY)
     if (!raw) return initial
-    return { ...initial, ...(JSON.parse(raw) as Partial<Progress>) }
+    const saved = { ...initial, ...(JSON.parse(raw) as Partial<Progress>) }
+    // a floor, not a default — it also lifts anyone holding older saved state
+    return { ...saved, completed: Math.max(FLOOR, saved.completed) }
   } catch {
     return initial
   }
