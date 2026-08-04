@@ -10,6 +10,12 @@ interface Slide {
   /** Headline split into runs so the green phrases can be marked up inline. */
   parts: { text: string; accent?: boolean }[];
   art: string;
+  /**
+   * Drawn size inside the fixed art box. The first two illustrations carry far
+   * more ink than the others, so they sit smaller — the box itself does not
+   * change, which is what keeps every card the same height.
+   */
+  artSize?: number;
 }
 
 const SLIDES: Slide[] = [
@@ -20,6 +26,7 @@ const SLIDES: Slide[] = [
       { text: ", not ₹1 crore." },
     ],
     art: "/assets/onb/step1.png",
+    artSize: 223,
   },
   {
     parts: [
@@ -27,6 +34,7 @@ const SLIDES: Slide[] = [
       { text: " You just wait." },
     ],
     art: "/assets/onb/step2.png",
+    artSize: 192,
   },
   {
     parts: [
@@ -44,6 +52,9 @@ const SLIDES: Slide[] = [
     art: "/assets/onb/step4.png",
   },
 ];
+
+/** The art box every card reserves, whatever is drawn inside it. */
+const ART_BOX = 268;
 
 /** The intro counts as a slide, so the progress bar has five stops. */
 const STOPS = SLIDES.length + 1;
@@ -163,7 +174,15 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
                   <div className="onb-card">
                     {/* same cell grid the success sheet uses, radially masked */}
                     <div className="cell-grid" />
-                    <img src={slide.art} alt="" />
+                    <span className="onb-art">
+                      <img
+                        src={slide.art}
+                        alt=""
+                        style={{
+                          width: `${((slide.artSize ?? ART_BOX) / ART_BOX) * 100}%`,
+                        }}
+                      />
+                    </span>
                     <h2>
                       {slide.parts.map((part, k) => (
                         <span
