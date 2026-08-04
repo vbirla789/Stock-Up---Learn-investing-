@@ -132,7 +132,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
                   <p>
                     The bits nobody explains,
                     <br />
-                    in thirty seconds. Swipe up.
+                    in 30 seconds. Swipe up.
                   </p>
                 </div>
               </div>

@@ -1734,6 +1734,13 @@ html[data-nav='back'] {
   margin: auto 0;
 }
 
+/* Flex items floor at min-height:auto, which is what let a tall card push the
+   chevrons out of the slide and onto the card peeking below. Both the card and
+   the art it holds have to be allowed to give. */
+.onb-slide > .onb-card {
+  min-height: 0;
+}
+
 .onb-intro {
   display: flex;
   flex-direction: column;
@@ -1773,7 +1780,7 @@ html[data-nav='back'] {
 .onb-intro-copy p {
   margin: 0;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
   color: #676b89;
 }
@@ -1793,8 +1800,11 @@ html[data-nav='back'] {
   box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.25);
 }
 
+/* The art carries a fixed ratio, so it is the only part of the card with
+   height to spare — it letterboxes rather than the card overflowing. */
 .onb-card img {
   width: 100%;
+  flex: 0 1 auto;
   min-height: 0;
   object-fit: contain;
 }
@@ -1816,8 +1826,12 @@ html[data-nav='back'] {
 
 /* ---------- the only thing saying "keep going" ---------- */
 
+/* The 32 is a floor, not a gap — auto margins on the content absorb any slack
+   above it, but this much always has to exist, so on a short viewport the card
+   is forced to give rather than crowding the cue. */
 .onb-chevrons {
   flex-shrink: 0;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
