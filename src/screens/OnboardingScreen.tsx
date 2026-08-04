@@ -126,13 +126,13 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
                   width={36}
                   height={36}
                 />
-                <p className="onb-eyebrow">FIRST, THE WHY</p>
+                <p className="onb-eyebrow">BEFORE YOU START</p>
                 <div className="onb-intro-copy">
-                  <h1>You don’t need money to start. You need time.</h1>
+                  <h1>Investing is way simpler than it sounds.</h1>
                   <p>
-                    The bits nobody explains,
+                    Four things nobody explains.
                     <br />
-                    in 30 seconds. Swipe up.
+                    30 seconds. Swipe up.
                   </p>
                 </div>
               </div>
