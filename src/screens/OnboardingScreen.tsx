@@ -56,8 +56,8 @@ const SLIDES: Slide[] = [
 /** The art box every card reserves, whatever is drawn inside it. */
 const ART_BOX = 268;
 
-/** The intro counts as a slide, so the progress bar has five stops. */
-const STOPS = SLIDES.length + 1;
+/** One stop per card — the deck opens straight onto the first one. */
+const STOPS = SLIDES.length;
 
 /** The wordmark has no control, so it hands over on a timer. */
 const SPLASH_MS = 1500;
@@ -143,37 +143,9 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
             </div>
 
             <div className="onb-deck" ref={deck} onScroll={onScroll}>
-              <section className="onb-slide">
-                <div className="onb-intro">
-                  {/* the mark and its label are one unit, tighter than the
-                      gap that separates them from the copy */}
-                  <div className="onb-intro-mark">
-                    <img
-                      className="onb-mark"
-                      src="/assets/onb/icon-graph.svg"
-                      alt=""
-                      width={36}
-                      height={36}
-                    />
-                    <p className="onb-eyebrow">BEFORE YOU START</p>
-                  </div>
-                  <div className="onb-intro-copy">
-                    <h1>Investing is way simpler than it sounds.</h1>
-                    <p>
-                      Four things nobody explains.
-                      <br />
-                      30 seconds. Swipe up.
-                    </p>
-                  </div>
-                </div>
-                <Chevrons />
-              </section>
-
               {SLIDES.map((slide, i) => (
                 <section className="onb-slide" key={i}>
                   <div className="onb-card">
-                    {/* same cell grid the success sheet uses, radially masked */}
-                    <div className="cell-grid" />
                     <span className="onb-art">
                       <img
                         src={slide.art}
