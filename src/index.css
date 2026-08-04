@@ -1772,13 +1772,10 @@ html[data-nav='up'] {
 /* A slide stops one gap plus one peek short of the viewport, which is what
    leaves the next card showing at the bottom. The trailing padding buys the
    extra pull that ends onboarding. */
-/* Rises in behind the wordmark leaving — the intro slide used to carry this
-   arrival, and with it gone the deck has to do it itself. */
 .onb-deck {
   --peek: 39px;
   --slide-gap: 48px;
 
-  animation: rise 420ms var(--ease-out) 160ms backwards;
   position: relative;
   z-index: 2;
   flex: 1;
@@ -1809,8 +1806,8 @@ html[data-nav='up'] {
 }
 
 /* The chevrons sit near the foot of every slide, not a fixed gap under the
-   content — auto margins on the card centre it in whatever is left, so the cue
-   lands in the same place however tall the card is. */
+   content — auto margins on the content centre it in whatever is left, so a
+   tall card and the short intro both leave the cue in the same place. */
 .onb-slide {
   flex: 0 0 calc(100% - var(--peek) - var(--slide-gap));
   scroll-snap-align: start;
@@ -1820,6 +1817,7 @@ html[data-nav='up'] {
   padding-bottom: 16px;
 }
 
+.onb-slide > .onb-intro,
 .onb-slide > .onb-card {
   margin: auto 0;
 }
@@ -1831,12 +1829,61 @@ html[data-nav='up'] {
   min-height: 0;
 }
 
+.onb-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  /* arrives behind the wordmark leaving, so the two never move at once */
+  animation: rise 420ms var(--ease-out) 160ms backwards;
+}
 
+/* 12 inside the pair, 16 between the pair and the copy — the mark belongs to
+   its label, not to the headline. */
+.onb-intro-mark {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
 
+.onb-mark {
+  display: block;
+  flex-shrink: 0;
+}
 
+.onb-eyebrow {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #676b89;
+}
 
+.onb-intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
+.onb-intro-copy h1 {
+  margin: 0;
+  font-family: 'Sansation', 'Nunito', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #000;
+}
 
+.onb-intro-copy p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #676b89;
+}
 
 /* ---------- card ---------- */
 
@@ -1852,7 +1899,7 @@ html[data-nav='up'] {
   border: 1px solid #e2e4ec;
   border-radius: 28px;
   background: #fff;
-  box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.25);
 }
 
 /* The box is the same 268 on every card, so card heights never move — the
