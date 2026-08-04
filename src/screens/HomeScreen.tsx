@@ -15,9 +15,9 @@ const STONE: Record<LevelState, string> = {
   locked: '/assets/path/stone-locked.png',
 }
 
-// The trail snakes as it climbs: right, middle, left, middle, repeat. Level 1
-// starts on the right, so the lane falls out of the level's own number.
-const LANES = ['is-right', 'is-center', 'is-left', 'is-center'] as const
+// The trail snakes as it climbs: left, middle, right, middle, repeat. Level 1
+// starts on the left, so the lane falls out of the level's own number.
+const LANES = ['is-left', 'is-center', 'is-right', 'is-center'] as const
 
 function laneFor(id: number) {
   return LANES[(id - 1) % LANES.length]

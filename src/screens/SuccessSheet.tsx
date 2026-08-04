@@ -26,7 +26,7 @@ export default function SuccessSheet({
         </div>
 
         <div className="sheet" onClick={(e) => e.stopPropagation()}>
-        <div className="dot-grid" />
+        <div className="cell-grid" />
         <img className="sheet-glare" src="/assets/success/glare.svg" alt="" />
 
         <div className="sheet-badge">

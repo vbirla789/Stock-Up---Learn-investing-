@@ -77,11 +77,12 @@ export default function App() {
 
   // Onboarding hands over to the path, not to a lesson — the climb is the
   // thing the four cards were arguing for, so it should be what you land on.
+  // 'up' so the path rises the way the deck was being pulled.
   function finishOnboarding() {
     navigate(() => {
       setOnboarding(false)
       setView({ name: 'home' })
-    })
+    }, 'up')
   }
 
   function reset() {

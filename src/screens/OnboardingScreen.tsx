@@ -10,8 +10,6 @@ interface Slide {
   /** Headline split into runs so the green phrases can be marked up inline. */
   parts: { text: string; accent?: boolean }[]
   art: string
-  /** The illustration's native ratio — each card sizes its own art box. */
-  ratio: string
 }
 
 const SLIDES: Slide[] = [
@@ -22,7 +20,6 @@ const SLIDES: Slide[] = [
       { text: ', not ₹1 crore.' },
     ],
     art: '/assets/onb/step1.png',
-    ratio: '532 / 508',
   },
   {
     parts: [
@@ -30,7 +27,6 @@ const SLIDES: Slide[] = [
       { text: ' You just wait.' },
     ],
     art: '/assets/onb/step2.png',
-    ratio: '736 / 820',
   },
   {
     parts: [
@@ -38,7 +34,6 @@ const SLIDES: Slide[] = [
       { text: 'costs one Zomato order.', accent: true },
     ],
     art: '/assets/onb/step3.png',
-    ratio: '760 / 790',
   },
   {
     parts: [
@@ -47,7 +42,6 @@ const SLIDES: Slide[] = [
       { text: ' of most people.' },
     ],
     art: '/assets/onb/step4.png',
-    ratio: '660 / 788',
   },
 ]
 
@@ -104,6 +98,7 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
       {!showDeck ? (
         <div className="onb-splash">
           <h1>Stock up</h1>
+          <p>The stock market, explained for teenagers.</p>
         </div>
       ) : (
         <>
@@ -142,11 +137,9 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
             {SLIDES.map((slide, i) => (
               <section className="onb-slide" key={i}>
                 <div className="onb-card">
-                  <img
-                    src={slide.art}
-                    alt=""
-                    style={{ aspectRatio: slide.ratio }}
-                  />
+                  {/* same cell grid the success sheet uses, radially masked */}
+                  <div className="cell-grid" />
+                  <img src={slide.art} alt="" />
                   <h2>
                     {slide.parts.map((part, k) => (
                       <span

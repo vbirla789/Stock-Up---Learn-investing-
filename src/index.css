@@ -1008,6 +1008,28 @@ button {
   overflow: hidden;
 }
 
+/* 50px rounded cells, masked by a radial so the grid only reads near the top
+   of a surface and dissolves before it reaches the edges. Backs both the
+   success sheet and the onboarding cards. */
+.cell-grid {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/success/sheet-grid.svg');
+  background-size: 50.077px 50.077px;
+  background-position: -0.5px -17.84px;
+  -webkit-mask-image: radial-gradient(
+    130% 90% at 50% 32%,
+    rgba(0, 0, 0, 0.6) 0%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    130% 90% at 50% 32%,
+    rgba(0, 0, 0, 0.6) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
 /* Hung off the card's top-left corner, so the rays fan out behind the badge */
 .sheet-glare {
   position: absolute;
@@ -1408,6 +1430,16 @@ button {
   animation: vt-out 150ms var(--ease-out) both;
 }
 
+/* Leaving onboarding crosses over more slowly — both screens are white, so a
+   fast cut reads as a flicker rather than a change. */
+html[data-nav='up']::view-transition-old(screen) {
+  animation-duration: 260ms;
+}
+
+html[data-nav='up']::view-transition-new(screen) {
+  animation-duration: 380ms;
+}
+
 ::view-transition-new(screen) {
   animation: vt-in 260ms var(--ease-out) both;
 }
@@ -1424,20 +1456,30 @@ button {
   }
 }
 
-/* Content slides in from the side you came from, so forward reads as forward
-   and back reads as back. `navigate()` sets [data-nav] before the snapshot. */
+/* Content enters along the axis you travelled: forward pushes left, back
+   pushes right, and leaving onboarding rises, because the gesture that got you
+   out of the deck was an upward pull. A sideways slide after an upward swipe is
+   most of what made that one hand-off feel wrong. `navigate()` sets [data-nav]
+   before the snapshot is taken. */
 :root {
-  --slide-from: 18px;
+  --slide-x: 18px;
+  --slide-y: 0px;
 }
 
 html[data-nav='back'] {
-  --slide-from: -18px;
+  --slide-x: -18px;
+  --slide-y: 0px;
+}
+
+html[data-nav='up'] {
+  --slide-x: 0px;
+  --slide-y: 20px;
 }
 
 @keyframes slide-in {
   from {
     opacity: 0;
-    transform: translateX(var(--slide-from));
+    transform: translate(var(--slide-x), var(--slide-y));
   }
   to {
     opacity: 1;
@@ -1613,17 +1655,33 @@ html[data-nav='back'] {
   z-index: 2;
   flex: 1;
   display: flex;
-  justify-content: center;
-  padding-top: 280px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 266px;
 }
 
 .onb-splash h1 {
   margin: 0;
   font-family: 'Sansation', 'Nunito', sans-serif;
   font-weight: 700;
-  font-size: 64px;
+  font-size: 56px;
   line-height: 1.4;
+  white-space: nowrap;
   animation: onb-wordmark 620ms var(--ease-out) backwards;
+}
+
+/* Lands after the wordmark rather than with it — the name arrives, then it
+   tells you what it is. */
+.onb-splash p {
+  margin: 0;
+  width: 273px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #676b89;
+  text-align: center;
+  animation: rise 520ms var(--ease-out) 260ms backwards;
 }
 
 @keyframes onb-wordmark {
@@ -1788,7 +1846,9 @@ html[data-nav='back'] {
 /* ---------- card ---------- */
 
 .onb-card {
+  position: relative;
   width: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1800,16 +1860,20 @@ html[data-nav='back'] {
   box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.25);
 }
 
-/* The art carries a fixed ratio, so it is the only part of the card with
-   height to spare — it letterboxes rather than the card overflowing. */
-.onb-card img {
-  width: 100%;
+/* The art is the only part of the card with height to spare, so it is what
+   gives on a short viewport — it letterboxes rather than the card overflowing. */
+.onb-card > img {
+  position: relative;
+  width: 268px;
+  max-width: 100%;
+  aspect-ratio: 1;
   flex: 0 1 auto;
   min-height: 0;
   object-fit: contain;
 }
 
 .onb-card h2 {
+  position: relative;
   margin: 0;
   width: 100%;
   font-family: 'Sansation', 'Nunito', sans-serif;
