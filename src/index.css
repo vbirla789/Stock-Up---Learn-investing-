@@ -1745,21 +1745,34 @@ html[data-nav='back'] {
   scroll-snap-align: end;
 }
 
+/* The chevrons sit near the foot of every slide, not a fixed gap under the
+   content — auto margins on the content centre it in whatever is left, so a
+   tall card and the short intro both leave the cue in the same place. */
 .onb-slide {
   flex: 0 0 calc(100% - var(--peek) - var(--slide-gap));
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 40px;
+  padding-bottom: 16px;
+}
+
+.onb-slide > .onb-intro,
+.onb-slide > .onb-card {
+  margin: auto 0;
 }
 
 .onb-intro {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 24px;
   text-align: center;
+}
+
+.onb-mark {
+  display: block;
+  flex-shrink: 0;
 }
 
 .onb-eyebrow {
@@ -1787,7 +1800,7 @@ html[data-nav='back'] {
 
 .onb-intro-copy p {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.4;
   color: #676b89;

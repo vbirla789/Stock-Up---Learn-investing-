@@ -119,6 +119,13 @@ export default function OnboardingScreen({ onDone }: OnboardingScreenProps) {
           <div className="onb-deck" ref={deck} onScroll={onScroll}>
             <section className="onb-slide">
               <div className="onb-intro">
+                <img
+                  className="onb-mark"
+                  src="/assets/onb/icon-graph.svg"
+                  alt=""
+                  width={36}
+                  height={36}
+                />
                 <p className="onb-eyebrow">FIRST, THE WHY</p>
                 <div className="onb-intro-copy">
                   <h1>You don’t need money to start. You need time.</h1>
