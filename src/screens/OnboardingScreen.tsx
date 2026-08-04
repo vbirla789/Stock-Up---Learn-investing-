@@ -43,14 +43,6 @@ const SLIDES: Slide[] = [
     ],
     art: "/assets/onb/step3.png",
   },
-  {
-    parts: [
-      { text: "Invest now to be " },
-      { text: "15 years ahead", accent: true },
-      { text: " of most people." },
-    ],
-    art: "/assets/onb/step4.png",
-  },
 ];
 
 /** The art box every card reserves, whatever is drawn inside it. */
