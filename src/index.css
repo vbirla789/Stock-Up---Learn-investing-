@@ -1695,12 +1695,14 @@ html[data-nav='back'] {
   transition: width 420ms var(--ease-out);
 }
 
+/* Quieter than the intro copy on purpose — SKIP is the way out, not an
+   option being offered. Same grey the locked path labels use. */
 .onb-skip {
   flex-shrink: 0;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
-  color: #676b89;
+  color: #b7b4b8;
 }
 
 .onb-skip:active {
