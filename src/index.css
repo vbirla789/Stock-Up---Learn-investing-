@@ -1031,6 +1031,9 @@ button {
 }
 
 /* Hung off the card's top-left corner, so the rays fan out behind the badge */
+/* The export already carries 0.15; halving it again is what keeps the rays
+   from cutting bright lines through the cell grid behind them — the two only
+   started fighting once the grid arrived. */
 .sheet-glare {
   position: absolute;
   left: -73.5px;
@@ -1038,6 +1041,7 @@ button {
   width: 513px;
   height: 512px;
   max-width: none;
+  opacity: 0.5;
   pointer-events: none;
 }
 
